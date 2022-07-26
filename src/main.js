@@ -4,8 +4,13 @@ import router from './router'
 import store from './store/'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import VueMarkdownEditor from './plugins/mdEditor'
+
 Vue.config.productionTip = false
+
 Vue.use(ElementUI);
+Vue.use(VueMarkdownEditor);
+
 new Vue({
   router,store,
   render: h => h(App),
