@@ -1,5 +1,5 @@
 <template>
-  <div>editor</div>
+  <div>Editor</div>
 </template>
 
 <script>
@@ -10,5 +10,5 @@
  }
 </script>
 
-<style lang=scss>
+<style>
 </style>
