@@ -2,7 +2,7 @@
   <div class="icons">
     <div class="iconfont icon-dianzan"><span>1</span></div>
     <div class="iconfont icon-huifu"><span>2</span></div>
-    <div class="iconfont icon-shoucang"></div>
+    <div @click="save" class="iconfont icon-shoucang"></div>
     <div class="iconfont icon-fenxiang">
       <div class="share">
         <div><i class="iconfont icon-weixin"></i><span>微信</span></div>
@@ -15,8 +15,19 @@
   </div>
 </template>
 <script>
+import { Message } from 'element-ui';
 export default {
-
+  data(){
+    return {
+     
+    }
+  },
+  methods:{
+    //收藏与取消收藏
+    save:()=>{
+      Message.success("搜藏成功")
+    }
+  }
 }
 </script>
 <style scoped>
