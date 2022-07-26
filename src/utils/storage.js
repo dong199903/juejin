@@ -1,8 +1,6 @@
 const nameSpace = 'juejin'
 /**
- * 获取
- * key:string
- * return:res
+ * 获取:key对应的结果
  */
 export function get(key) {
     if(!localStorage.getItem(nameSpace)) return null
@@ -11,7 +9,7 @@ export function get(key) {
 }
 
 /**
- * 添加
+ * 添加;key-val
  * @param {string} key 
  * @param {返回结果} val 
  */
@@ -24,10 +22,13 @@ export function set(key,val) {
 
 /**
  * 删除某一项
- * del
+ * del：key
  */
 export function del(key) {
-  
+  if(!localStorage.getItem(nameSpace)) return 
+  let obj = JSON.parse(localStorage.getItem(nameSpace)) 
+  delete obj[key]
+  localStorage.setItem(nameSpace,JSON.stringify(obj))
 }
 
 /**
