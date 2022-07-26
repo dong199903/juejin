@@ -3,7 +3,7 @@ import router from "@/router/index"
 import {set,get} from "@/util/storage"
 
 const instance = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://www.fastmock.site/mock/61d777d394fcbffba0ad0c7c844ef61e/api',
   timeout: 5000
 });
 
