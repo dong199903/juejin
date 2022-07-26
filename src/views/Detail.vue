@@ -39,7 +39,7 @@ export default {
   }
   .detail-main-fixed{
     position: fixed;
-    left: 60px;
+    left: 120px;
     top: 20px;
     width: 100px;
     min-height: 100vh;
