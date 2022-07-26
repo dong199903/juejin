@@ -9,12 +9,44 @@
           <el-button type="primary">发布</el-button>
         </el-row>
         <div class="transform-editor"></div>
-        <div class="block">
-          <el-avatar :size="32" :src="circleUrl"></el-avatar>
-        </div>
+
+
+        <!-- 头像区域 -->
+        <el-dropdown trigger="click">
+          <span class="el-dropdown-link">
+
+            <div class="block">
+              <el-avatar :size="32" :src="circleUrl"></el-avatar>
+            </div>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>写文章</el-dropdown-item>
+            <el-dropdown-item>草稿</el-dropdown-item>
+            <el-dropdown-item divided>我的主页</el-dropdown-item>
+            <el-dropdown-item>我喜欢的</el-dropdown-item>
+            <el-dropdown-item>我的收藏集</el-dropdown-item>
+            <el-dropdown-item>标签管理</el-dropdown-item>
+            <el-dropdown-item divided>设置</el-dropdown-item>
+            <el-dropdown-item>
+              <el-dropdown>
+                <div class="el-dropdown-link about-btn">
+                  <div>关于</div>
+                  <div>&gt;</div>
+                </div>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>下载应用</el-dropdown-item>
+                  <el-dropdown-item>关于</el-dropdown-item>
+                  <el-dropdown-item>加入我们</el-dropdown-item>
+                  <el-dropdown-item>翻译计划</el-dropdown-item>
+                  <el-dropdown-item>合作伙伴</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </header>
-        <!-- 这个是正文区奥 -->
+    <!-- 这个是正文区奥 -->
     <md-editor :content.sync="obj.content" :extraStyle.sync="obj.extraStyle"></md-editor>
   </div>
 </template>
@@ -132,5 +164,13 @@ header {
   background-color: #bfa;
   float: left;
   margin: 22px 16px 22px 0;
+}
+
+.about-btn div:first-child {
+  float: left;
+  padding-right: 100px;
+}
+.about-btn div:last-child {
+  float: right;
 }
 </style>
