@@ -6,9 +6,9 @@
         <div class="header-tip">{{ headerTip }}</div>
         <el-row class="header-btns">
           <el-button plain>草稿箱</el-button>
-          <el-button type="primary">发布</el-button>
+          <el-button type="primary" @click="showSP">发布</el-button>
         </el-row>
-        <div class="transform-editor"></div>
+        <div class="transform-editor" @click="toRich"></div>
 
 
         <!-- 头像区域 -->
@@ -46,15 +46,20 @@
         </el-dropdown>
       </div>
     </header>
-    <!-- 这个是正文区奥 -->
+
+    <!-- 这个是正文编辑区奥 -->
     <md-editor :content.sync="obj.content" :extraStyle.sync="obj.extraStyle"></md-editor>
+
+    <!-- 提交面板 -->
+    <submit-panel class="sub-panel" v-if="showSubmitPanel" tabindex="111" ref="sp" />
   </div>
 </template>
 
 <script>
 
 
-import MdEditor from '@/components/v-md-editor/index';
+import MdEditor from '@/components/editor/MdEditor';
+import SubmitPanel from '@/components/editor/SubmitPanel';
 
 export default {
   data() {
@@ -65,13 +70,12 @@ export default {
       },
       headerTip: "文章将自动保存至草稿箱",
       circleUrl: require('@/assets/logo.png'),
+      showSubmitPanel: true,
     }
   },
   components: {
-    MdEditor
-  },
-  created() {
-    console.log("不要吹灭你的灵感和你的想象力; 不要成为你的模型的奴隶。 ——文森特・梵高");
+    MdEditor,
+    SubmitPanel
   },
   watch: {
     'obj.content': function () {
@@ -85,7 +89,13 @@ export default {
       setTimeout(function () {
         _self.headerTip = "保存成功"
       }, 500)
-    }
+    },
+    toRich() {
+      this.$parent.transformEditor("富文本")
+    },
+    showSP() {
+      this.showSubmitPanel = !this.showSubmitPanel;
+    },
   }
 }
 </script>
@@ -136,7 +146,7 @@ header {
 .header-btns button:first-child {
   /* 14*3=42 16*2=32 */
   width: 74px;
-  padding-left: 16px;
+  padding-left: 15px;
   /* 颜色 */
   color: #1d7dfa;
   border-color: #1d7dfa;
@@ -145,7 +155,7 @@ header {
 .header-btns button:last-child {
   /* 14*2=28 16*2=32 */
   width: 60px;
-  padding-left: 16px;
+  padding-left: 15px;
 }
 
 .block {
@@ -170,7 +180,15 @@ header {
   float: left;
   padding-right: 100px;
 }
+
 .about-btn div:last-child {
   float: right;
+}
+
+/* 提交面板 */
+.sub-panel {
+  position: absolute;
+  top: 62px;
+  right: 75px;
 }
 </style>
