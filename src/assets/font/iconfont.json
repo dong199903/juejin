@@ -6,6 +6,20 @@
   "description": "仿掘金官网项目",
   "glyphs": [
     {
+      "icon_id": "1312011",
+      "name": "转换",
+      "font_class": "zhuanhuan",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "900870",
+      "name": "close-2",
+      "font_class": "close2",
+      "unicode": "e6dd",
+      "unicode_decimal": 59101
+    },
+    {
       "icon_id": "77697",
       "name": "点赞",
       "font_class": "dianzan",

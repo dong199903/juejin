@@ -1,15 +1,14 @@
 <template>
   <div>
     <header>
-      <input type="text" id="editor-title" placeholder="输入文章标题..." @input="saveArticle">
+      <input type="text" id="editor-title" placeholder="输入文章标题..." @input="saveArticle" v-model="mdEditorObj.title">
       <div class="header-function">
         <div class="header-tip">{{ headerTip }}</div>
         <el-row class="header-btns">
           <el-button plain>草稿箱</el-button>
           <el-button type="primary" @click="showSP">发布</el-button>
         </el-row>
-        <div class="transform-editor" @click="toRich"></div>
-
+        <div class="transform-editor" @click="toRich"><span class="iconfont icon-style">&#xe64a;</span></div>
 
         <!-- 头像区域 -->
         <el-dropdown trigger="click">
@@ -48,10 +47,11 @@
     </header>
 
     <!-- 这个是正文编辑区奥 -->
-    <md-editor :content.sync="obj.content" :extraStyle.sync="obj.extraStyle"></md-editor>
+    <md-editor :content.sync="mdEditorObj.content" :extraStyle.sync="mdEditorObj.extraStyle"></md-editor>
 
     <!-- 提交面板 -->
-    <submit-panel class="sub-panel" v-if="showSubmitPanel" tabindex="111" ref="sp" />
+    <submit-panel class="sub-panel" v-if="showSubmitPanel" tabindex="111" ref="sp" :content="mdEditorObj.content"
+      :articleTitle="mdEditorObj.title" :submitType="'markdown'" />
   </div>
 </template>
 
@@ -64,13 +64,14 @@ import SubmitPanel from '@/components/editor/SubmitPanel';
 export default {
   data() {
     return {
-      obj: {
-        content: "你好",
-        extraStyle: "height: calc(100vh - 66px);"
+      mdEditorObj: {
+        title: "",
+        content: "",
+        extraStyle: "min-height: calc(100vh - 66px);"
       },
       headerTip: "文章将自动保存至草稿箱",
       circleUrl: require('@/assets/logo.png'),
-      showSubmitPanel: true,
+      showSubmitPanel: false,
     }
   },
   components: {
@@ -78,7 +79,7 @@ export default {
     SubmitPanel
   },
   watch: {
-    'obj.content': function () {
+    'mdEditorObj.content': function () {
       this.saveArticle();
     }
   },
@@ -101,6 +102,7 @@ export default {
 </script>
 
 <style>
+
 header {
   height: 64px;
   background-color: white;
@@ -171,9 +173,9 @@ header {
 .transform-editor {
   width: 20px;
   height: 20px;
-  background-color: #bfa;
   float: left;
   margin: 22px 16px 22px 0;
+  cursor: pointer;
 }
 
 .about-btn div:first-child {
@@ -190,5 +192,11 @@ header {
   position: absolute;
   top: 62px;
   right: 75px;
+  z-index: 999;
+}
+
+.icon-style {
+  font-size: 20px;
+  color: rgb(179, 179, 179);
 }
 </style>

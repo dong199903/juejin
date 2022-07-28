@@ -8,38 +8,20 @@
 
             <div class="split-line"></div>
             <!-- 表单 -->
-            <el-form label-position="right" label-width="100px" :model="formLabelAlign" class="sp-form">
-                <el-form-item label="分类:">
-                    <el-radio-group v-model="formLabelAlign.type" class="sp-form-type">
-                        <span>
-                            <el-radio-button label="后端"></el-radio-button>
-                        </span>
-                        <span>
-                            <el-radio-button label="前端"></el-radio-button>
-                        </span>
-                        <span>
-                            <el-radio-button label="Android"></el-radio-button>
-                        </span>
-                        <span>
-                            <el-radio-button label="IOS"></el-radio-button>
-                        </span>
-                        <span>
-                            <el-radio-button label="人工智能"></el-radio-button>
-                        </span>
-                        <span>
-                            <el-radio-button label="开发工具"></el-radio-button>
-                        </span>
-                        <span>
-                            <el-radio-button label="代码人生"></el-radio-button>
-                        </span>
-                        <span>
-                            <el-radio-button label="阅读"></el-radio-button>
+            <el-form label-position="right" label-width="100px" :model="formMsg" class="sp-form" size="mini"
+                ref="formMsg" :rules="rules">
+                <el-form-item label="分类:" prop="type">
+                    <el-radio-group v-model="formMsg.type" class="sp-form-type">
+                        <!-- 子选项 -->
+                        <span v-for="(typeItem, index) in formLabel.type" :key="index">
+                            <el-radio-button :label="typeItem"></el-radio-button>
                         </span>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="添加标签:">
-                    <el-select v-model="formLabelAlign.labelValue" filterable placeholder="请搜索添加标签">
-                        <el-option v-for="item in formLabelAlign.label" :key="item.value" :label="item.label"
+
+                <el-form-item label="添加标签:" prop="tag">
+                    <el-select v-model="formMsg.tag" filterable placeholder="请搜索添加标签" class="select-style" multiple>
+                        <el-option v-for="item in formLabel.tags" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
                     </el-select>
@@ -47,26 +29,32 @@
                 <el-form-item label="文章封面:">
                     <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                         :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                        <img v-if="formLabelAlign.imageUrl" :src="formLabelAlign.imageUrl" class="avatar">
+                        <img v-if="formMsg.imageUrl" :src="formMsg.imageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         <div class="upload-img-tips">上传封面</div>
                     </el-upload>
+                    <div class="cover-tips">建议尺寸：1303*734px</div>
                 </el-form-item>
                 <el-form-item label="收录至专栏:">
-                    <el-select v-model="formLabelAlign.labelValue" filterable placeholder="请搜索添加专栏，同一篇文章最多添加三个专栏">
+                    <el-select v-model="formMsg.collection" filterable placeholder="请搜索添加专栏，同一篇文章最多添加三个专栏"
+                        class="select-style" multiple>
+                        <el-option v-for="item in formLabel.collection" :key="item.value" :label="item.label"
+                            :value="item.value">
+                        </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="编辑摘要:">
-                    <el-input type="textarea" :rows="2" v-model="formLabelAlign.abstract">
+                <el-form-item label="编辑摘要:" prop="abstract">
+                    <el-input type="textarea" :rows="2" v-model="formMsg.abstract" rows="5" maxlength="100">
                     </el-input>
+                    <div class="count-tip">{{ formLabel.countNum }}/100</div>
                 </el-form-item>
             </el-form>
             <div class="split-line mt-20"></div>
 
             <!-- 底部按钮 -->
             <el-row class="mt20 f-right sp-submit-btns">
-                <el-button plain @click="hideSP">取消</el-button>
-                <el-button type="primary">确定并发布</el-button>
+                <el-button plain @click="hideSP" size="mini">取消</el-button>
+                <el-button type="primary" size="mini" @click="submitEditor('formMsg')">确定并发布</el-button>
             </el-row>
         </div>
     </div>
@@ -76,11 +64,9 @@
 export default {
     data() {
         return {
-            formLabelAlign: {
-                name: '',
-                region: '',
-                type: '',
-                label: [{
+            formLabel: {
+                type: ["后端", "前端", "Android", "IOS", "人工智能", "开发工具", "代码人生", "阅读",],
+                tags: [{
                     value: '前端',
                     label: '前端'
                 }, {
@@ -111,11 +97,36 @@ export default {
                     value: 'CSS',
                     label: 'CSS'
                 }],
-                labelValue: '',
+                collection: [{
+                    value: '前端',
+                    label: '前端'
+                },],
+                countNum: 0
+            },
+            formMsg: {
+                type: '',
+                tag: '',
+                collection: '',
+                imageUrl: '',
                 abstract: '',
-                imageUrl: ''
-            }
+            },
+            rules: {
+                type: [
+                    { required: true, message: '请选择一个分类', trigger: 'blur' },
+                ],
+                tag: [
+                    { required: true, message: '至少添加一个标签', trigger: 'blur' }
+                ],
+                abstract: [
+                    { required: true, message: '摘要不满足最低50字的要求', trigger: 'blur', min: 50 }
+                ],
+            },
         }
+    },
+    props: {
+        content: String,
+        articleTitle: String,
+        submitType: String
     },
     methods: {
         hideSP() {
@@ -135,10 +146,42 @@ export default {
                 this.$message.error('上传头像图片大小不能超过 2MB!');
             }
             return isJPG && isLt2M;
-        }
+        },
+        // 提交表单
+        submitEditor(formMsg) {
+
+            this.$refs[formMsg].validate((valid) => {
+                if (valid) {
+                    // 验证通过
+
+                    const data = {
+                        title: this.articleTitle,
+                        content: this.content,
+                        submitType: this.submitType,
+                        articleDetails: formMsg,
+                        // 用户身份相关
+                        userId: 123
+                    }
+                    // 提交后台！！！
+
+                    console.log(data);
+
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
 
     },
-    created() { },
+    watch: {
+        'formMsg.abstract': function () {
+            this.formLabel.countNum = this.formMsg.abstract.length;
+        },
+    },
+    created() {
+        this.formMsg.abstract = this.content.replaceAll('\n', " ").slice(0, 100).trim();
+    },
     mounted() { }
 }
 </script>
@@ -186,14 +229,12 @@ export default {
 .sp-form-type .el-radio-button__inner {
     width: 90px;
     height: 30px;
-    padding-top: 6px;
-    margin: 6px 8px 4px;
+    padding: 0;
+    margin: 0px 8px 16px 0;
     font-size: 14px;
     color: grey;
     background-color: rgb(248, 248, 248);
-}
-.sp-form-type .el-radio-button__inner:nth-of-type(odd) {
-    margin-right: 0;
+    text-align: center;
 }
 
 .sp-form-type .el-radio-button__inner:hover {
@@ -237,10 +278,29 @@ export default {
 .mt-20 {
     margin-top: -20px;
 }
+
 .f-right {
     float: right;
 }
+
 .sp-submit-btns {
     padding: 20px;
+}
+
+.cover-tips {
+    margin-top: -10px;
+    color: grey;
+}
+
+.select-style {
+    width: 350px;
+}
+
+.count-tip {
+    color: red;
+    font-size: 12px;
+    position: absolute;
+    bottom: 0;
+    right: 10px;
 }
 </style>
