@@ -18,6 +18,9 @@ export default {
     RichText
   },
   created() {
+    // 设置标题
+    document.title = this.$route.meta.title;
+    
     console.log("不要吹灭你的灵感和你的想象力; 不要成为你的模型的奴隶。 ——文森特・梵高");
 
     // this.isMdEditor = false

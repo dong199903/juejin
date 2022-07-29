@@ -1,12 +1,12 @@
 <template>
   <div>
-    <header>
+    <header @click="hideSP">
       <input type="text" id="editor-title" placeholder="输入文章标题..." @input="saveArticle" v-model="mdEditorObj.title">
       <div class="header-function">
         <div class="header-tip">{{ headerTip }}</div>
         <el-row class="header-btns">
           <el-button plain>草稿箱</el-button>
-          <el-button type="primary" @click="showSP">发布</el-button>
+          <el-button type="primary" @click.stop="showSP">发布</el-button>
         </el-row>
         <div class="transform-editor" @click="toRich"><span class="iconfont icon-style">&#xe64a;</span></div>
 
@@ -47,11 +47,16 @@
     </header>
 
     <!-- 这个是正文编辑区奥 -->
-    <md-editor :content.sync="mdEditorObj.content" :extraStyle.sync="mdEditorObj.extraStyle"></md-editor>
+    <div  @click="hideSP">
+      <md-editor :content.sync="mdEditorObj.content" :extraStyle.sync="mdEditorObj.extraStyle">
+      </md-editor>
+    </div>
 
     <!-- 提交面板 -->
     <submit-panel class="sub-panel" v-if="showSubmitPanel" tabindex="111" ref="sp" :content="mdEditorObj.content"
       :articleTitle="mdEditorObj.title" :submitType="'markdown'" />
+
+
   </div>
 </template>
 
@@ -96,6 +101,9 @@ export default {
     },
     showSP() {
       this.showSubmitPanel = !this.showSubmitPanel;
+    },
+    hideSP() {
+      this.showSubmitPanel = false;
     },
   }
 }

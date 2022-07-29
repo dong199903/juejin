@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-md-editor v-model="editorValue" :disabled-menus="[]" @upload-image="handleUploadImage" :style="extraStyle">
-        </v-md-editor>
+        </v-md-editor >
     </div>
 </template>
 
