@@ -8,6 +8,7 @@ import PhoneLogin from "@/views/login/PhoneLogin"
 import OtherLogin from "@/views/login/OtherLogin"
 import PhoneResetPwd from "@/views/login/PhoneResetPwd"
 import EmailResetPwd from "@/views/login/EmailResetPwd"
+import App from "@/views/App"
 import {get} from "@/utils/storage"
 import { Message } from 'element-ui';
 
@@ -47,6 +48,11 @@ const router = new Router ({
       name: "EmailResetPwd",
       path: "/emailresetpwd",
       component:EmailResetPwd
+    },
+    {
+      name: "App",
+      path: "/app",
+      component:App
     }
   ]
 })
