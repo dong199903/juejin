@@ -2,36 +2,11 @@
   <div class="shopping">
     <ShopHeader/>
     <div class="shopping-box">
-      <div class="item">
-        <img src='	https://img01.yzcdn.cn/upload_files/2022/07/20/Fr9Plsl7CbniO3tasqIaukp4EjqF.jpg!280x280.jpg'/>
-        <p>JUEJIN FRIENDS 「码赛克」码克杯</p>
-        <div class="price">￥ 69.0</div>
+      <div class="item" v-for="(item,index) in shop" :key="index">
+        <img v-lazy='item.img'/>
+        <p>{{item.title}}</p>
+        <div class="price">￥ {{item.price}}</div>
       </div>
-
-      <div class="item">
-        <img src='@/assets/imgs/shop/2.jpg'/>
-        <p>JUEJIN FRIENDS 「码赛克」码克杯</p>
-        <div>￥ 69.0</div>
-      </div>
-
-      <div class="item">
-        <img src='@/assets/imgs/2.jpg'/>
-        <p>JUEJIN FRIENDS 「码赛克」码克杯</p>
-        <div>￥ 69.0</div>
-      </div>
-
-      <div class="item">
-        <img src='@/assets/imgs/2.jpg'/>
-        <p>JUEJIN FRIENDS 「码赛克」码克杯</p>
-        <div>￥ 69.0</div>
-      </div>
-
-      <div class="item">
-        <img src='@/assets/imgs/2.jpg'/>
-        <p>JUEJIN FRIENDS 「码赛克」码克杯</p>
-        <div>￥ 69.0</div>
-      </div>
-
     </div>
   </div>
 </template>
@@ -57,7 +32,7 @@
           method:"get",
           url:"/shop/list"
         })
-        console.log(info)
+        this.shop = info.data
       }
     }
   }
