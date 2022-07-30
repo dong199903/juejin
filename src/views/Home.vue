@@ -1,6 +1,6 @@
 <template>
   <div>
-    homes
+    homes-xiongyin
   </div>
 </template>
 <script>
