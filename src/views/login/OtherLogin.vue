@@ -93,8 +93,7 @@ export default {
         }else if(this.otherLoginForm.code===''){
           this.$message("请输入密码");
         }else{
-
-
+          //正常的登录操作
         }
       },
       close(){
