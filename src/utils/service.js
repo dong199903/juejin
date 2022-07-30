@@ -9,7 +9,9 @@ const instance = axios.create({
 
 
 instance.interceptors.request.use(function (config) {
-  
+  // 请求前，添加token
+  let token = get("token")
+  config.headers.Authorization = 'Bearer ' + token;
   return config;
 }, function (error) {
   // 对请求错误做些什么
