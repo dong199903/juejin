@@ -19,7 +19,7 @@ instance.interceptors.request.use(function (config) {
 // 添加响应拦截器
 instance.interceptors.response.use(function (response) {
   let data = response.data
-  if(data.code==200)
+  if(data.code==200) {
     //1.如果是登录，保持token。跳转到首页
     set("token",data.data)
     Message.success("登录成功")
@@ -27,6 +27,7 @@ instance.interceptors.response.use(function (response) {
       router.push("/")
     }, 1500);
     return data;
+  }
   if(data.code==501) {
     Message.error(data.msg)
   }
