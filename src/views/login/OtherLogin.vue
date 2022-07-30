@@ -75,7 +75,7 @@
 
 <script>
 // import { isBoxedPrimitive } from 'util/types';
-
+import services from "@/utils/service"
 export default {
    data() {
       return {
@@ -87,13 +87,26 @@ export default {
       }
     },
     methods: {
-      login() {
+      async login() {
        if(this.otherLoginForm.phone===''){
           this.$message("请填写手机号或邮箱");
         }else if(this.otherLoginForm.code===''){
           this.$message("请输入密码");
         }else{
           //正常的登录操作
+          console.log(this.otherLoginForm.phone,this.otherLoginForm.code)
+          let info = await services({
+            url:"/user/login",
+            method:"post",
+            data:{
+              username:this.otherLoginForm.phone,
+              password:this.otherLoginForm.code
+            }
+          })
+          //清空表单数据
+          this.otherLoginForm.phone = ""
+          this.otherLoginForm.code = ""
+          console.log(info)
         }
       },
       close(){
