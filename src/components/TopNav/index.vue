@@ -8,30 +8,28 @@
                         <img src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg"
                             alt="稀土掘金" class="logo-img" />
                     </a>
-
                 </div>
             </el-col>
             <!-- 菜单 -->
             <el-col :span="11">
                 <div class="layout-header">
                     <el-menu active-text-color="#1787FB !important" :default-active="activeIndex" :ellipsis="false"
-                        mode="horizontal">
+                        mode="horizontal" router>
                         <template v-for="(menu, index) in menuList">
                             <el-menu-item :key="menu.id" :index="menu.path" v-if="menu">
-                                <a v-if="menu.id === 7" target="_blank"
-                                    href="https://detail.youzan.com/show/goods/newest?kdt_id=104340304">
-                                    {{ menu.title }}
-                                </a>
-                                <a v-if="menu.id === 8" target="_blank" href="https://juejin.cn/app?utm_source=jj_nav">
-                                    {{ menu.title }}
-                                </a>
-                                <a v-if="menu.id === 9" target="_blank"
-                                    href="https://juejin.cn/extension?utm_source=jj_nav">
-                                    {{ menu.title }}
-                                </a>
-                                <div v-if="menu.id < 7">{{ menu.title }}</div>
+                                {{ menu.title }}
                             </el-menu-item>
                         </template>
+                        <el-menu-item>
+                            <a target="_blank" href="https://juejin.cn/app?utm_source=jj_nav">
+                                APP
+                            </a>
+                        </el-menu-item>
+                        <el-menu-item>
+                            <a target="_blank" href="https://juejin.cn/extension?utm_source=jj_nav">
+                                插件
+                            </a>
+                        </el-menu-item>
                     </el-menu>
                 </div>
             </el-col>
@@ -40,14 +38,10 @@
                 <div class="layout-header">
                     <!-- 搜索框 -->
                     <div class="search">
-                        <!-- <el-input v-model="keyword" split-button suffix-icon="el-icon-search" placeholder="搜索稀土掘金"
-                            size="medium">
-                        </el-input> -->
                         <el-autocomplete v-model="keyword" split-button size="medium" suffix-icon="el-icon-search"
-                            placeholder="搜索稀土掘金"
-                            value-key="title"
-                            :fetch-suggestions="querySearch" :popper-append-to-body="false"
-                            @select="handleSelect" @keyup.native.enter='setIntoStorage'>
+                            placeholder="探索稀土掘金" value-key="title" :fetch-suggestions="querySearch"
+                            :popper-append-to-body="false" @select="handleSelect"
+                            @keyup.native.enter='setIntoStorage($event)'>
                         </el-autocomplete>
                     </div>
                     <!-- 创作者中心 -->
@@ -93,7 +87,6 @@
 
 <script>
 import Avatar from '../Avatar/index.vue'
-import { get, set, del } from "@/utils/storage"
 import { nanoid } from 'nanoid'
 const menuList = [
     {
@@ -104,43 +97,28 @@ const menuList = [
     {
         title: '沸点',
         id: 2,
-        path: '/2'
+        path: '/pins'
     },
     {
         title: '课程',
         id: 3,
-        path: '/3'
+        path: '/course'
     },
     {
         title: '直播',
         id: 4,
-        path: '/4'
-    },
-    {
-        title: '资讯',
-        id: 5,
-        path: '/5'
+        path: '/live'
     },
     {
         title: '活动',
         id: 6,
-        path: '/6'
+        path: '/events/all'
     },
     {
         title: '商城',
         id: 7,
-        path: '/7'
+        path: '/shop'
     },
-    {
-        title: 'APP',
-        id: 8,
-        path: '/8'
-    },
-    {
-        title: '插件',
-        id: 9,
-        path: '/9'
-    }
 ]
 export default {
     name: "",
@@ -150,9 +128,9 @@ export default {
             keyword: '',                   //接收搜索框输入的数据
             menuList,                      //菜单列表
             activeIndex: this.$route.path, //当菜单为路由模式时,激活菜单的路径
-            filHistory:[],                 //搜索查询结果
-            searchHistory: JSON.parse(localStorage.getItem('histroys')) || [],             //定义一个存放历史搜索记录的数组
-            
+            filHistory: [],                 //搜索查询结果
+            //定义一个存放历史搜索记录的数组
+            searchHistory: JSON.parse(localStorage.getItem('histroys')) || [],
         };
     },
     methods: {
@@ -161,7 +139,7 @@ export default {
             if (JSON.parse(localStorage.getItem('histroys'))) {
                 this.searchHistory = JSON.parse(localStorage.getItem('histroys'))
             }
-            var searchHistory = this.searchHistory.slice(0,6);
+            var searchHistory = this.searchHistory.slice(0, 6);
             //根据输入的值与历史搜索的数组进行匹配
             var results = queryString ? searchHistory.filter(this.createFilter(queryString)) : searchHistory;
             // 调用 callback 返回建议列表的数据
@@ -174,21 +152,25 @@ export default {
         },
         //点击历史搜索的数据，获取到点击的数据，此处应加查询跳转事件
         handleSelect(item) {
-            // console.log(item);
+            console.log(item);
         },
-        //回车，点击事件
-        setIntoStorage() {
+        //回车，点击事件，此处应查询与输入匹配的title
+        setIntoStorage(event) {
+            if (event) {
+                event.target.blur()
+            }
             if (!this.keyword.trim()) return alert('输入不能为空')
             //将用户的输入包装成一个histroyObj对象
             const histroyObj = { id: nanoid(), title: this.keyword }
             this.searchHistory.unshift(histroyObj)
+            //此处添加搜索功能
         }
     },
     watch: {
         keyWord: {
             immediate: true,
             handler(val) {
-                this.filHistory = this.searchHistory.reverse()
+                // this.filHistory = this.searchHistory.reverse()
                 // console.log(this.filHistory);
             },
             deep: true,
@@ -201,7 +183,7 @@ export default {
         }
     },
     mounted() {
-     
+
     }
 }
 </script>
@@ -283,7 +265,6 @@ export default {
     border-bottom: #1787FB solid 2px !important;
 }
 
-
 .el-menu-item>a {
     display: block;
     /* 设置为块元素 */
@@ -301,15 +282,25 @@ export default {
 .el-autocomplete {
     width: 170px;
     height: 35px;
-    transition: all 0.2s ease-in-out !important;
+    transition: all 0.2s ease-in-out;
+    
 }
 
 .el-autocomplete:focus-within {
-    width: 330px;
+    width: 300px !important;
 }
 
-.el-autocomplete :deep(.el-popper) {
-    width: 330px !important;
+:deep(.el-popper) {
+    width: 300px !important;
+}
+:deep(.el-scrollbar){
+    /* transition:width 2s; */
+    
+}
+
+:deep(.el-autocomplete-suggestion li) {
+    font-size: 12px;
+    text-align: left;
 }
 
 /* 输入框 深选择器*/
