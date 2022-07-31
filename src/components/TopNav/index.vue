@@ -17,14 +17,20 @@
                     <el-menu active-text-color="#1787FB !important" :default-active="activeIndex" :ellipsis="false"
                         mode="horizontal">
                         <template v-for="(menu, index) in menuList">
-                            <el-menu-item :key="menu.id" :index="menu.path" v-if="!menu.children"> {{ menu.title }}
+                            <el-menu-item :key="menu.id" :index="menu.path" v-if="menu">
+                                <a v-if="menu.id === 7" target="_blank"
+                                    href="https://detail.youzan.com/show/goods/newest?kdt_id=104340304">
+                                    {{ menu.title }}
+                                </a>
+                                <a v-if="menu.id === 8" target="_blank" href="https://juejin.cn/app?utm_source=jj_nav">
+                                    {{ menu.title }}
+                                </a>
+                                <a v-if="menu.id === 9" target="_blank"
+                                    href="https://juejin.cn/extension?utm_source=jj_nav">
+                                    {{ menu.title }}
+                                </a>
+                                <div v-if="menu.id < 7">{{ menu.title }}</div>
                             </el-menu-item>
-                            <el-submenu v-if="menu.children" :index="menu.path" :key="menu.id">
-                                <template #title>{{ menu.title }}</template>
-                                <el-menu-item v-for="item in menu.children" :key="item.id" :index="item.path">
-                                    <template #title>{{ item.title }}</template>
-                                </el-menu-item>
-                            </el-submenu>
                         </template>
                     </el-menu>
                 </div>
@@ -34,9 +40,15 @@
                 <div class="layout-header">
                     <!-- 搜索框 -->
                     <div class="search">
-                        <el-input v-model="keyword" split-button suffix-icon="el-icon-search" placeholder="搜索稀土掘金"
+                        <!-- <el-input v-model="keyword" split-button suffix-icon="el-icon-search" placeholder="搜索稀土掘金"
                             size="medium">
-                        </el-input>
+                        </el-input> -->
+                        <el-autocomplete v-model="keyword" split-button size="medium" suffix-icon="el-icon-search"
+                            placeholder="搜索稀土掘金"
+                            value-key="title"
+                            :fetch-suggestions="querySearch" :popper-append-to-body="false"
+                            @select="handleSelect" @keyup.native.enter='setIntoStorage'>
+                        </el-autocomplete>
                     </div>
                     <!-- 创作者中心 -->
                     <div class="creation">
@@ -52,7 +64,7 @@
                     </div>
                     <!-- 会员 -->
                     <div class="stickysth">
-                        <a href="#" class="vipimg">
+                        <a href="#" underline="none" class="vipimg">
                             <img data-v-b569322c=""
                                 src="//lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/24127194d5b158d7eaf8f09a256c5d01.svg"
                                 alt="vip" class="vip-img">
@@ -81,6 +93,8 @@
 
 <script>
 import Avatar from '../Avatar/index.vue'
+import { get, set, del } from "@/utils/storage"
+import { nanoid } from 'nanoid'
 const menuList = [
     {
         title: '首页',
@@ -113,43 +127,82 @@ const menuList = [
         path: '/6'
     },
     {
-        title: '开放社区',
+        title: '商城',
         id: 7,
-        path: '/7',
-        children: [
-            {
-                title: '青训营社区',
-                id: 11,
-                path: '/11'
-            }
-        ]
+        path: '/7'
     },
     {
-        title: '商城',
+        title: 'APP',
         id: 8,
         path: '/8'
     },
     {
-        title: 'APP',
+        title: '插件',
         id: 9,
         path: '/9'
-    },
-    {
-        title: '插件',
-        id: 10,
-        path: '/10'
     }
 ]
 export default {
     name: "",
+    components: { Avatar },
     data() {
         return {
-            keyword: '',     //接收搜索框输入的数据
-            menuList,        //菜单列表
-            activeIndex: this.$route.path //当菜单为路由模式时,激活菜单的路径
+            keyword: '',                   //接收搜索框输入的数据
+            menuList,                      //菜单列表
+            activeIndex: this.$route.path, //当菜单为路由模式时,激活菜单的路径
+            filHistory:[],                 //搜索查询结果
+            searchHistory: JSON.parse(localStorage.getItem('histroys')) || [],             //定义一个存放历史搜索记录的数组
+            
         };
     },
-    components: { Avatar }
+    methods: {
+        querySearch(queryString, cb) {
+            //如果有缓存值，那就给历史搜索的数组赋值
+            if (JSON.parse(localStorage.getItem('histroys'))) {
+                this.searchHistory = JSON.parse(localStorage.getItem('histroys'))
+            }
+            var searchHistory = this.searchHistory.slice(0,6);
+            //根据输入的值与历史搜索的数组进行匹配
+            var results = queryString ? searchHistory.filter(this.createFilter(queryString)) : searchHistory;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (searchHistory) => {
+                return (searchHistory.title.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+        },
+        //点击历史搜索的数据，获取到点击的数据，此处应加查询跳转事件
+        handleSelect(item) {
+            // console.log(item);
+        },
+        //回车，点击事件
+        setIntoStorage() {
+            if (!this.keyword.trim()) return alert('输入不能为空')
+            //将用户的输入包装成一个histroyObj对象
+            const histroyObj = { id: nanoid(), title: this.keyword }
+            this.searchHistory.unshift(histroyObj)
+        }
+    },
+    watch: {
+        keyWord: {
+            immediate: true,
+            handler(val) {
+                this.filHistory = this.searchHistory.reverse()
+                // console.log(this.filHistory);
+            },
+            deep: true,
+        },
+        searchHistory: {
+            deep: true,
+            handler(value) {
+                localStorage.setItem('histroys', JSON.stringify(value))
+            }
+        }
+    },
+    mounted() {
+     
+    }
 }
 </script>
 
@@ -165,13 +218,15 @@ export default {
 .el-row {
     display: flex;
     flex-wrap: nowrap;
+    border-bottom: #F4F5F5 1.5px solid;
 }
 
-/* 作用于整个导航栏 */
+/* 作用于导航栏 */
 .layout-header {
     display: flex;
     float: left;
     align-items: center;
+    text-align: center;
     height: 60px;
     background-color: #fff;
 }
@@ -198,15 +253,28 @@ export default {
 .el-menu--horizontal {
     height: 100%;
     border: 0;
-    border: none;
+    border: none !important;
     display: flex;
     flex-wrap: nowrap;
 }
 
+/* 一级菜单 */
+.el-menu-item {
+    padding-left: 11px;
+    padding-right: 11px;
+    text-decoration: none;
+    border: none;
+    color: #333 !important;
+}
+
+/* 去掉选中el-menu-item时的下划线 这样设置下划线不会跳一下*/
+.el-menu--horizontal>.el-menu-item {
+    border-bottom: none !important;
+}
 
 /* 菜单激活时 */
-.el-menu-item.is-active {
-    background: #fff;
+.el-menu--horizontal>.el-menu-item.is-active {
+    /* background: #fff; */
     border-bottom: none !important;
 }
 
@@ -215,30 +283,14 @@ export default {
     border-bottom: #1787FB solid 2px !important;
 }
 
-/* 深选择器，有二级菜单的一级菜单鼠标悬停 */
-.el-submenu :deep(.el-submenu__title:hover) {
-    color: #1787FB !important;
-}
 
-/* 有二级菜单的一级菜单 */
-.el-submenu :deep(.el-submenu__title) {
-    color: #333 !important;
-}
+.el-menu-item>a {
+    display: block;
+    /* 设置为块元素 */
+    line-height: 58px;
+    /* 设置垂直居中 */
+    /* vertical-align: baseline !important; */
 
-/* 未生效 */
-.el-submenu :deep(.el-menu-item:hover) {
-    color: #1787FB !important;
-    border-bottom: none !important;
-}
-
-/* 一级菜单 */
-.el-menu-item {
-    padding-left: 11px;
-    padding-right: 11px;
-    border-bottom: none;
-    text-decoration: none;
-    border: none;
-    color: #333 !important;
 }
 
 /* 搜索框 */
@@ -246,8 +298,22 @@ export default {
     margin-left: 30px;
 }
 
+.el-autocomplete {
+    width: 170px;
+    height: 35px;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.el-autocomplete:focus-within {
+    width: 330px;
+}
+
+.el-autocomplete :deep(.el-popper) {
+    width: 330px !important;
+}
+
 /* 输入框 深选择器*/
-.el-input :deep(.el-input__inner) {
+/* .el-input :deep(.el-input__inner) {
     width: 170px;
     height: 35px;
     transition: all 0.3s ease-in-out !important;
@@ -255,7 +321,7 @@ export default {
 
 .el-input :deep(.el-input__inner:focus) {
     width: 330px;
-}
+} */
 
 /* 搜索框聚焦时，创作者中心不显示 */
 .search:focus-within~.creation {
@@ -279,6 +345,12 @@ export default {
     align-items: center;
     position: absolute;
     right: 120px;
+
+}
+
+a {
+    /* 下划线去除 */
+    text-decoration: none;
 }
 
 /* 会员 */
@@ -306,7 +378,7 @@ export default {
 
 /* 消息图标 */
 .elLink {
-    font-size: 25px;
+    font-size: 19px;
     margin-right: 10px;
 }
 

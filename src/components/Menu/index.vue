@@ -39,37 +39,47 @@
     width: 960px;
     margin: 0 auto;
 }
+
 .menu-container {
     height: 46px;
     display: flex;
     align-items: center;
     background-color: #fff;
+    border-bottom: #F4F5F5 1.5px solid;
+
 }
 
 .submenu {
     display: flex;
     justify-content: space-between !important;
     align-items: center;
+
+
 }
 
 ul {
     display: flex;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
+
 }
 
 li {
+    display: flex;
+    flex-wrap: nowrap;
     margin-right: 20px;
 }
 
 a {
-    text-decoration:none;
+    text-decoration: none;
     color: #333;
     font-size: 14px;
 }
 
-a:hover,a:active {
-    color: #1787FB; 
+a:hover,
+a:active {
+    color: #1787FB;
 }
 
 

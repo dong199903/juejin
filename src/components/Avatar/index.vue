@@ -30,37 +30,37 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+// import { useStore } from 'vuex'
+// import { useRouter } from 'vue-router'
 
-const store = useStore()
-const router = useRouter()
+// const store = useStore()
+// const router = useRouter()
 
-const logout = () => {
-  ElMessageBox.confirm('确认要退出登陆吗?', '警告', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    type: 'warning'
-  })
-    .then(() => {
-      store.dispatch('app/logout')
-      ElMessage({
-        type: 'success',
-        message: '退出成功'
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '已取消'
-      })
-    })
-}
-const handleCommand = (command) => {
-  if (command === '/editor') {
-    router.push('/editor')
-  }
-}
+// const logout = () => {
+//   ElMessageBox.confirm('确认要退出登陆吗?', '警告', {
+//     confirmButtonText: '确认',
+//     cancelButtonText: '取消',
+//     type: 'warning'
+//   })
+//     .then(() => {
+//       store.dispatch('app/logout')
+//       ElMessage({
+//         type: 'success',
+//         message: '退出成功'
+//       })
+//     })
+//     .catch(() => {
+//       ElMessage({
+//         type: 'info',
+//         message: '已取消'
+//       })
+//     })
+// }
+// const handleCommand = (command) => {
+//   if (command === '/editor') {
+//     router.push('/editor')
+//   }
+// }
 </script>
 
 <style scoped>
