@@ -2,27 +2,35 @@
   <div class="detail">
     <div class="detail-main">
       <div class="detail-main-left"></div>
-      <div class="detail-main-right"></div>
-      <div class="detail-main-fixed"></div>
+      <div class="detail-main-right">
+        <div></div>
+        <div><img src="@/assets/imgs/2.jpg"/></div>
+        <div><img src="@/assets/imgs/3.jpg"/></div>
+        <div><img src="@/assets/imgs/1.jpg"/></div>
+        <div></div>
+      </div>
     </div>
+    <IconBarVue/>
   </div>
 </template>
 <script>
-
+import IconBarVue from '@/components/IconBar.vue'
 export default {
-  
+  components:{
+    IconBarVue
+  }
 }
 </script>
 
 <style>
   .detail{
     width: 100%;
-    min-height: 100vh;
+    height: 100%;
     background: #f4f5f5
   }
   .detail-main{
-    max-width: 1000px;
-    height: 100vh;
+    max-width: 1100px;
+    height: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -31,18 +39,17 @@ export default {
   .detail-main-right{
     width: 300px;
     margin-left: 20px;
-    background: #fff;
+    
   }
   .detail-main-left{
     flex: 1;
     background: #fff;
   }
-  .detail-main-fixed{
-    position: fixed;
-    left: 60px;
-    top: 20px;
-    width: 100px;
-    min-height: 100vh;
-    background: red;
+  .detail-main-right img{
+    width: 100%;
+  }
+  .detail-main-right>div{
+    background: #fff;
+    margin-bottom: 20px;
   }
 </style>
