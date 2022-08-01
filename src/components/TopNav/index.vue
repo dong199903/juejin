@@ -8,30 +8,28 @@
                         <img src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg"
                             alt="稀土掘金" class="logo-img" />
                     </a>
-
                 </div>
             </el-col>
             <!-- 菜单 -->
             <el-col :span="11">
                 <div class="layout-header">
                     <el-menu active-text-color="#1787FB !important" :default-active="activeIndex" :ellipsis="false"
-                        mode="horizontal">
+                        mode="horizontal" router>
                         <template v-for="(menu, index) in menuList">
                             <el-menu-item :key="menu.id" :index="menu.path" v-if="menu">
-                                <a v-if="menu.id === 7" target="_blank"
-                                    href="https://detail.youzan.com/show/goods/newest?kdt_id=104340304">
-                                    {{ menu.title }}
-                                </a>
-                                <a v-if="menu.id === 8" target="_blank" href="https://juejin.cn/app?utm_source=jj_nav">
-                                    {{ menu.title }}
-                                </a>
-                                <a v-if="menu.id === 9" target="_blank"
-                                    href="https://juejin.cn/extension?utm_source=jj_nav">
-                                    {{ menu.title }}
-                                </a>
-                                <div v-if="menu.id < 7">{{ menu.title }}</div>
+                                {{ menu.title }}
                             </el-menu-item>
                         </template>
+                        <el-menu-item>
+                            <a target="_blank" href="https://juejin.cn/app?utm_source=jj_nav">
+                                APP
+                            </a>
+                        </el-menu-item>
+                        <el-menu-item>
+                            <a target="_blank" href="https://juejin.cn/extension?utm_source=jj_nav">
+                                插件
+                            </a>
+                        </el-menu-item>
                     </el-menu>
                 </div>
             </el-col>
@@ -40,14 +38,16 @@
                 <div class="layout-header">
                     <!-- 搜索框 -->
                     <div class="search">
-                        <!-- <el-input v-model="keyword" split-button suffix-icon="el-icon-search" placeholder="搜索稀土掘金"
-                            size="medium">
-                        </el-input> -->
                         <el-autocomplete v-model="keyword" split-button size="medium" suffix-icon="el-icon-search"
-                            placeholder="搜索稀土掘金"
-                            value-key="title"
-                            :fetch-suggestions="querySearch" :popper-append-to-body="false"
-                            @select="handleSelect" @keyup.native.enter='setIntoStorage'>
+                            placeholder="探索稀土掘金" value-key="title" :fetch-suggestions="querySearch"
+                            :popper-append-to-body="false" popper-class="search-his" @select="handleSelect"
+                            @keyup.native.enter='setIntoStorage($event)'>
+                            <template slot-scope="{ item }">
+                                <div v-if="item.id === 1" class="search-nav" id="searchhis">
+                                    <span class="search-title">{{ item.title }}</span>
+                                    <span class="search-button" @click="empty">{{ item.hisbutton }}</span>
+                                </div>
+                            </template>
                         </el-autocomplete>
                     </div>
                     <!-- 创作者中心 -->
@@ -58,6 +58,7 @@
                                 <el-dropdown-menu>
                                     <el-dropdown-item icon="el-icon-edit">写文章</el-dropdown-item>
                                     <el-dropdown-item icon="el-icon-edit-outline"> 发沸点 </el-dropdown-item>
+                                    <el-dropdown-item icon="el-icon-s-platform"> 写代码 </el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
@@ -93,7 +94,6 @@
 
 <script>
 import Avatar from '../Avatar/index.vue'
-import { get, set, del } from "@/utils/storage"
 import { nanoid } from 'nanoid'
 const menuList = [
     {
@@ -104,43 +104,28 @@ const menuList = [
     {
         title: '沸点',
         id: 2,
-        path: '/2'
+        path: '/pins'
     },
     {
         title: '课程',
         id: 3,
-        path: '/3'
+        path: '/course'
     },
     {
         title: '直播',
         id: 4,
-        path: '/4'
-    },
-    {
-        title: '资讯',
-        id: 5,
-        path: '/5'
+        path: '/live'
     },
     {
         title: '活动',
         id: 6,
-        path: '/6'
+        path: '/events/all'
     },
     {
         title: '商城',
         id: 7,
-        path: '/7'
+        path: '/shop'
     },
-    {
-        title: 'APP',
-        id: 8,
-        path: '/8'
-    },
-    {
-        title: '插件',
-        id: 9,
-        path: '/9'
-    }
 ]
 export default {
     name: "",
@@ -150,22 +135,23 @@ export default {
             keyword: '',                   //接收搜索框输入的数据
             menuList,                      //菜单列表
             activeIndex: this.$route.path, //当菜单为路由模式时,激活菜单的路径
-            filHistory:[],                 //搜索查询结果
-            searchHistory: JSON.parse(localStorage.getItem('histroys')) || [],             //定义一个存放历史搜索记录的数组
-            
+            filHistory: [],                 //搜索查询结果
+            //定义一个存放历史搜索记录的数组
+            searchHistory: JSON.parse(localStorage.getItem('SearchHistory')) || [],
         };
     },
     methods: {
         querySearch(queryString, cb) {
-            //如果有缓存值，那就给历史搜索的数组赋值
-            if (JSON.parse(localStorage.getItem('histroys'))) {
-                this.searchHistory = JSON.parse(localStorage.getItem('histroys'))
-            }
-            var searchHistory = this.searchHistory.slice(0,6);
+            var searchHistory = this.searchHistory.slice(0, 6);
             //根据输入的值与历史搜索的数组进行匹配
             var results = queryString ? searchHistory.filter(this.createFilter(queryString)) : searchHistory;
+            if (results.length != 0) {
+                results.unshift({ id: 1, title: '搜索历史', hisbutton: '清除' })
+            }
             // 调用 callback 返回建议列表的数据
             cb(results);
+
+
         },
         createFilter(queryString) {
             return (searchHistory) => {
@@ -174,21 +160,35 @@ export default {
         },
         //点击历史搜索的数据，获取到点击的数据，此处应加查询跳转事件
         handleSelect(item) {
-            // console.log(item);
+            console.log(item);
+            if (item.id === 1) {
+                console.log("点击到搜索历史了");
+                this.keyword = "";
+            }
+
         },
-        //回车，点击事件
-        setIntoStorage() {
+        //回车，点击事件，此处应查询与输入匹配的title
+        setIntoStorage(event) {
+            if (event) {
+                event.target.blur()
+            }
             if (!this.keyword.trim()) return alert('输入不能为空')
             //将用户的输入包装成一个histroyObj对象
             const histroyObj = { id: nanoid(), title: this.keyword }
             this.searchHistory.unshift(histroyObj)
+            //此处添加搜索功能
+        },
+        //清空历史搜索记录
+        empty() {
+            localStorage.removeItem('SearchHistory');
+            this.searchHistory = [];
         }
     },
     watch: {
         keyWord: {
             immediate: true,
             handler(val) {
-                this.filHistory = this.searchHistory.reverse()
+                // this.filHistory = this.searchHistory.reverse()
                 // console.log(this.filHistory);
             },
             deep: true,
@@ -196,12 +196,12 @@ export default {
         searchHistory: {
             deep: true,
             handler(value) {
-                localStorage.setItem('histroys', JSON.stringify(value))
+                localStorage.setItem('SearchHistory', JSON.stringify(value))
             }
         }
     },
     mounted() {
-     
+
     }
 }
 </script>
@@ -209,6 +209,11 @@ export default {
 <style scoped>
 /* 整体顶部导航栏 */
 .nav {
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: all .2s;
+    display: block;
     background-color: #fff;
     border: none;
     white-space: nowrap;
@@ -283,14 +288,11 @@ export default {
     border-bottom: #1787FB solid 2px !important;
 }
 
-
 .el-menu-item>a {
-    display: block;
     /* 设置为块元素 */
-    line-height: 58px;
+    display: block;
     /* 设置垂直居中 */
-    /* vertical-align: baseline !important; */
-
+    line-height: 58px;
 }
 
 /* 搜索框 */
@@ -301,27 +303,50 @@ export default {
 .el-autocomplete {
     width: 170px;
     height: 35px;
-    transition: all 0.2s ease-in-out !important;
+    transition: all 0.2s ease-in-out;
+
 }
 
 .el-autocomplete:focus-within {
-    width: 330px;
-}
-
-.el-autocomplete :deep(.el-popper) {
     width: 330px !important;
 }
 
-/* 输入框 深选择器*/
-/* .el-input :deep(.el-input__inner) {
-    width: 170px;
-    height: 35px;
-    transition: all 0.3s ease-in-out !important;
+:deep(.el-popper) {
+    width: 330px !important;
 }
 
-.el-input :deep(.el-input__inner:focus) {
-    width: 330px;
-} */
+:deep(.el-autocomplete-suggestion li) {
+    font-size: 12px;
+    text-align: left;
+}
+
+::v-deep.el-autocomplete .search-his .search-nav {
+    user-select: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: #F4F5F5 1.5px solid;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+}
+
+::v-deep.el-autocomplete .search-his .search-nav .search-title {
+    margin-left: 20px;
+    color: #869aab;
+}
+
+::v-deep.el-autocomplete .search-his .search-nav .search-button {
+    margin-right: 20px;
+    color: #1e80ff;
+}
+
+::v-deep.el-autocomplete .el-autocomplete-suggestion__wrap {
+    margin-top: 25px !important;
+}
 
 /* 搜索框聚焦时，创作者中心不显示 */
 .search:focus-within~.creation {
@@ -362,7 +387,6 @@ a {
     font-size: 14px;
 }
 
-/* 登录按钮 */
 .login {
     position: absolute;
     right: 35px;
@@ -373,7 +397,7 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 /* 消息图标 */
