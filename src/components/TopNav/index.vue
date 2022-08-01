@@ -40,8 +40,14 @@
                     <div class="search">
                         <el-autocomplete v-model="keyword" split-button size="medium" suffix-icon="el-icon-search"
                             placeholder="探索稀土掘金" value-key="title" :fetch-suggestions="querySearch"
-                            :popper-append-to-body="false" @select="handleSelect"
+                            :popper-append-to-body="false" popper-class="search-his" @select="handleSelect"
                             @keyup.native.enter='setIntoStorage($event)'>
+                            <template slot-scope="{ item }">
+                                <div v-if="item.id === 1" class="search-nav" id="searchhis">
+                                    <span class="search-title">{{ item.title }}</span>
+                                    <span class="search-button" @click="empty">{{ item.hisbutton }}</span>
+                                </div>
+                            </template>
                         </el-autocomplete>
                     </div>
                     <!-- 创作者中心 -->
@@ -52,6 +58,7 @@
                                 <el-dropdown-menu>
                                     <el-dropdown-item icon="el-icon-edit">写文章</el-dropdown-item>
                                     <el-dropdown-item icon="el-icon-edit-outline"> 发沸点 </el-dropdown-item>
+                                    <el-dropdown-item icon="el-icon-s-platform"> 写代码 </el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
@@ -130,20 +137,21 @@ export default {
             activeIndex: this.$route.path, //当菜单为路由模式时,激活菜单的路径
             filHistory: [],                 //搜索查询结果
             //定义一个存放历史搜索记录的数组
-            searchHistory: JSON.parse(localStorage.getItem('histroys')) || [],
+            searchHistory: JSON.parse(localStorage.getItem('SearchHistory')) || [],
         };
     },
     methods: {
         querySearch(queryString, cb) {
-            //如果有缓存值，那就给历史搜索的数组赋值
-            if (JSON.parse(localStorage.getItem('histroys'))) {
-                this.searchHistory = JSON.parse(localStorage.getItem('histroys'))
-            }
             var searchHistory = this.searchHistory.slice(0, 6);
             //根据输入的值与历史搜索的数组进行匹配
             var results = queryString ? searchHistory.filter(this.createFilter(queryString)) : searchHistory;
+            if (results.length != 0) {
+                results.unshift({ id: 1, title: '搜索历史', hisbutton: '清除' })
+            }
             // 调用 callback 返回建议列表的数据
             cb(results);
+
+
         },
         createFilter(queryString) {
             return (searchHistory) => {
@@ -153,6 +161,11 @@ export default {
         //点击历史搜索的数据，获取到点击的数据，此处应加查询跳转事件
         handleSelect(item) {
             console.log(item);
+            if (item.id === 1) {
+                console.log("点击到搜索历史了");
+                this.keyword = "";
+            }
+
         },
         //回车，点击事件，此处应查询与输入匹配的title
         setIntoStorage(event) {
@@ -164,6 +177,11 @@ export default {
             const histroyObj = { id: nanoid(), title: this.keyword }
             this.searchHistory.unshift(histroyObj)
             //此处添加搜索功能
+        },
+        //清空历史搜索记录
+        empty() {
+            localStorage.removeItem('SearchHistory');
+            this.searchHistory = [];
         }
     },
     watch: {
@@ -178,7 +196,7 @@ export default {
         searchHistory: {
             deep: true,
             handler(value) {
-                localStorage.setItem('histroys', JSON.stringify(value))
+                localStorage.setItem('SearchHistory', JSON.stringify(value))
             }
         }
     },
@@ -191,6 +209,11 @@ export default {
 <style scoped>
 /* 整体顶部导航栏 */
 .nav {
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: all .2s;
+    display: block;
     background-color: #fff;
     border: none;
     white-space: nowrap;
@@ -266,12 +289,10 @@ export default {
 }
 
 .el-menu-item>a {
-    display: block;
     /* 设置为块元素 */
-    line-height: 58px;
+    display: block;
     /* 设置垂直居中 */
-    /* vertical-align: baseline !important; */
-
+    line-height: 58px;
 }
 
 /* 搜索框 */
@@ -283,19 +304,15 @@ export default {
     width: 170px;
     height: 35px;
     transition: all 0.2s ease-in-out;
-    
+
 }
 
 .el-autocomplete:focus-within {
-    width: 300px !important;
+    width: 330px !important;
 }
 
 :deep(.el-popper) {
-    width: 300px !important;
-}
-:deep(.el-scrollbar){
-    /* transition:width 2s; */
-    
+    width: 330px !important;
 }
 
 :deep(.el-autocomplete-suggestion li) {
@@ -303,16 +320,33 @@ export default {
     text-align: left;
 }
 
-/* 输入框 深选择器*/
-/* .el-input :deep(.el-input__inner) {
-    width: 170px;
-    height: 35px;
-    transition: all 0.3s ease-in-out !important;
+::v-deep.el-autocomplete .search-his .search-nav {
+    user-select: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: #F4F5F5 1.5px solid;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
 }
 
-.el-input :deep(.el-input__inner:focus) {
-    width: 330px;
-} */
+::v-deep.el-autocomplete .search-his .search-nav .search-title {
+    margin-left: 20px;
+    color: #869aab;
+}
+
+::v-deep.el-autocomplete .search-his .search-nav .search-button {
+    margin-right: 20px;
+    color: #1e80ff;
+}
+
+::v-deep.el-autocomplete .el-autocomplete-suggestion__wrap {
+    margin-top: 25px !important;
+}
 
 /* 搜索框聚焦时，创作者中心不显示 */
 .search:focus-within~.creation {
@@ -353,7 +387,6 @@ a {
     font-size: 14px;
 }
 
-/* 登录按钮 */
 .login {
     position: absolute;
     right: 35px;
@@ -364,7 +397,7 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 /* 消息图标 */

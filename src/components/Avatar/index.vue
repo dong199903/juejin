@@ -6,7 +6,7 @@
       </el-avatar>
     </span>
     <template #dropdown >
-      <el-dropdown-menu class="menu">
+      <el-dropdown-menu class="menu" >
         <el-dropdown-item icon="el-icon-edit" command="/editor"> 写文章 </el-dropdown-item>
         <el-dropdown-item icon="el-icon-document"> 草稿箱 </el-dropdown-item>
         <el-divider></el-divider>
