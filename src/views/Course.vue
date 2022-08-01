@@ -4,10 +4,10 @@
       <div class="content">
         <div class="content-title">
           <div class="content-title-left">
-            <div>全部</div>
-            <div>最新</div>
-            <div>最热</div>
-            <div class="price">
+            <div @click="bindChoice(0)" :class="choiceIndex=='0'?'active':''">全部</div>
+            <div @click="bindChoice(1)" :class="choiceIndex=='1'?'active':''">最新</div>
+            <div @click="bindChoice(2)" :class="choiceIndex=='2'?'active':''">最热</div>
+            <div @click="bindChoice(3)" :class="choiceIndex=='3'?'active':''" class="price">
               <span>价格</span>
               <div>
                 <i class="iconfont icon-xiangshangjiantou"></i>
@@ -21,28 +21,29 @@
           </div>
         </div>
 
-        <div class="course-list">
-          <img src="@/assets/book1.jpg"/>
+        <div class="course-list" v-for="(item,index) in list" :key="index">
+          <img :src=require(item.book) />
           <div class="course-list-info">
 
-            <p>零基础入门c++</p>
+            <p>{{item.title}}</p>
 
-            <div class="desc">带你从0开始认真的学习c++灯记者擦大大大打打打打啊打打打</div>
+            <div class="desc">{{item.desc}}</div>
 
             <div class="author">
-              <img src='@/assets/user.jpg'/>
-              <div class="name">董泽鹏</div>
-              <div>前端首席开发工程师</div>
+              <img :src='item.author'/>
+              <div class="name">{{item.name}}</div>
+              <div>{{item.info}}</div>
             </div>
 
             <div class="other">
-              <div class="price">￥89</div>
+              <div class="price">￥{{item.price}}</div>
               <div>已完结</div>
-              <div>37小节</div>
-              <div>999人已购买</div>
+              <div>{{item.count}}小节</div>
+              <div>{{item.view}}人已购买</div>
             </div>
           </div>
         </div>
+        
       </div>
 
       <div class="nav">
@@ -55,7 +56,70 @@
 </template>
 
 <script>
-
+  import services from "@/utils/service"
+  import debule from "@/utils/debunle"
+  export default {
+    /**
+     * size:一次性加载个数
+     * pageNum:当前页码
+     * type:1是默认的。2是按价格排序。升序
+     */
+    data() {
+      return {
+        choiceIndex:0,
+        size:5,
+        pageNum:0,
+        type:0,
+        list:[]
+      }
+    },
+    methods:{
+       bindChoice:function(e) {
+        if(e==this.choiceIndex) return
+        this.list = []
+        this.choiceIndex = e
+        this.pageNum = 0
+        
+        if(e==3) 
+          this.type = 1
+        else
+          this.type = 0
+        this.loadData()
+      },
+      loadData:async function(){
+        let info = await services({
+          method:"get",
+          url:"/course/list",
+          params:{
+            size:this.size,
+            type:this.type,
+            pageNum:this.pageNum
+          }
+        })
+        this.list.push(...info.data.list)
+        console.log(this.list)
+      },
+      
+      scrollJudge:function(){
+        var clientHeight = document.documentElement.scrollTop;
+        var scrollTop = document.documentElement.clientHeight;
+        var scrollHeight = Math.ceil(Math.max(document.body.clientHeight,document.documentElement.scrollHeight))
+        console.log(clientHeight,scrollTop,scrollHeight)
+        if(scrollTop + clientHeight >= scrollHeight-10){
+          this.loadData()
+        }
+      }
+    },
+    async created(){
+      this.loadData()
+    },
+    mounted(){
+      window.addEventListener('scroll',debule(1000,this.scrollJudge))
+    },
+    unmounted() {
+      window.removeEventListener("scroll",debule(1000,this.scrollJudge))
+    }
+  }
 </script>
 
 <style scoped>
@@ -173,9 +237,12 @@
     margin-right: 12px;
     color: #8a919f;
   }
-  .price{
+  .other .price{
     font-size: 22px;
     font-weight: bold;
+    
+  }
+  .active{
     color: #ff8412!important;
   }
 </style>
