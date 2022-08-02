@@ -10,7 +10,8 @@ import RichText from './RichText'
 export default {
   data() {
     return {
-      isMdEditor: true
+      isMdEditor: true,
+      refreshLock: false,
     }
   },
   components: {
@@ -20,7 +21,7 @@ export default {
   created() {
     // 设置标题
     document.title = this.$route.meta.title;
-    
+
     console.log("不要吹灭你的灵感和你的想象力; 不要成为你的模型的奴隶。 ——文森特・梵高");
 
     // this.isMdEditor = false
@@ -50,6 +51,18 @@ export default {
           message: '已切换为' + str + '编辑器'
         });
       });
+    }
+  },
+  watch: {
+    $route:
+    {
+      handler: function (val, oldVal) {
+        console.log(this.refreshLock);
+        if (!this.refreshLock) {
+          // 强制刷新
+          window.location.reload()
+        }
+      }
     }
   }
 }

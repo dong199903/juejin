@@ -153,18 +153,28 @@ export default {
             this.$refs[formMsg].validate((valid) => {
                 if (valid) {
                     // 验证通过
-
                     const data = {
+                        username: 123456,
+                        date: Date.now(),
+                        tag: this.formMsg.tag,
                         title: this.articleTitle,
+                        abstract: this.formMsg.abstract,
+                        watched: 0,
+                        likes: 0,
+                        comments: 0,
+                        coverUrl: this.formMsg.imageUrl,
+                        postId: this.$route.params.postId,
                         content: this.content,
-                        submitType: this.submitType,
-                        articleDetails: formMsg,
-                        // 用户身份相关
-                        userId: 123
+                        type: this.formMsg.type,
+                        collection: this.formMsg.collection,
+                        editor: this.submitType,
+                        status: 1
                     }
                     // 提交后台！！！
-
                     console.log(data);
+                    // 简单调用 vuex
+                    this.$store.commit("ADD_POST",data);
+                    this.$router.push('/editor');
 
                 } else {
                     console.log('error submit!!');

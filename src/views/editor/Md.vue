@@ -1,7 +1,8 @@
 <template>
   <div>
-    <header @click="hideSP">
-      <input type="text" id="editor-title" placeholder="输入文章标题..." @input="saveArticle" v-model="mdEditorObj.title">
+    <header @click="hideSP" id="top">
+      <input type="text" id="editor-title" placeholder="输入文章标题..." @input="saveArticle" v-model="mdEditorObj.title"
+        autoComplete='off'>
       <div class="header-function">
         <div class="header-tip">{{ headerTip }}</div>
         <el-row class="header-btns">
@@ -47,9 +48,23 @@
     </header>
 
     <!-- 这个是正文编辑区奥 -->
-    <div  @click="hideSP">
+    <div @click="hideSP">
       <md-editor :content.sync="mdEditorObj.content" :extraStyle.sync="mdEditorObj.extraStyle">
       </md-editor>
+    </div>
+
+    <div class="editor-tip-bar">
+      <div class="lb-tips">
+        字数：{{mdEditorObj.content.split(' ').join('').length}}
+        &nbsp;&nbsp;&nbsp;
+        行数：{{mdEditorObj.content == ""? 0: mdEditorObj.content.trim().split('\n').length}}
+      </div>
+      <div class="rb-btns">
+        <div>
+          <span class="spec-span"><input type="checkbox" checked readonly unselectable='true'></span>
+          <span class="spec-span2">同步滚动</span></div>
+        <a href="javascript:window.scrollTo(0,0)"><div>回到顶部</div></a>
+      </div>
     </div>
 
     <!-- 提交面板 -->
@@ -75,7 +90,7 @@ export default {
         extraStyle: "min-height: calc(100vh - 66px);"
       },
       headerTip: "文章将自动保存至草稿箱",
-      circleUrl: require('@/assets/logo.png'),
+      circleUrl: require('@/assets/头像.jpg'),
       showSubmitPanel: false,
     }
   },
@@ -90,11 +105,39 @@ export default {
   },
   methods: {
     saveArticle() {
-      this.headerTip = "保存中..."
-      const _self = this;
-      setTimeout(function () {
-        _self.headerTip = "保存成功"
-      }, 500)
+      if (!this.$route.params.postId) {
+        this.$parent.refreshLock = true;
+        // 生成postid
+        const postId = this.makePostId();
+        // 跳转
+        this.$router.push('/editor/' + postId)
+        // 判断postid
+        console.log(this.$route.params.postId);
+        // 延迟解锁
+        const _self = this;
+        setTimeout(function () {
+          _self.$parent.refreshLock = false;
+        }, 500)
+      } else {
+        // 开始保存到 vuex draft
+        this.headerTip = "保存中..."
+        const newDraft = {
+          "postId": this.$route.params.postId,
+          "title": this.mdEditorObj.title,
+          "content": this.mdEditorObj.content,
+          "editor": 'markdown',
+          "username": "admin",
+          "status": 0
+        };
+        const _self = this;
+        this.$store.commit(
+          "ADD_DRAFT", newDraft
+        )
+        // 延迟显示成功
+        setTimeout(function () {
+          _self.headerTip = "保存成功"
+        }, 500)
+      }
     },
     toRich() {
       this.$parent.transformEditor("富文本")
@@ -105,12 +148,38 @@ export default {
     hideSP() {
       this.showSubmitPanel = false;
     },
+    makePostId() {
+      let date = Date.now();
+      let rund = Math.ceil(Math.random() * 1000000)
+      let id = rund + '' + date;
+      return id.split().reverse().join();
+    }
+  },
+  created() {
+    const pid = this.$route.params.postId;
+    if (pid) {
+      // 获取草稿箱的内容
+      this.$store.commit('REFRESH_ARTICLE_DATA')
+      const draftMsg = this.$store.state.editorModule.draft["draft" + pid]
+      // console.log(draftMsg);
+      if (draftMsg && draftMsg.username == "admin") {
+        // 显示在界面
+        this.mdEditorObj.title = draftMsg.title;
+        this.mdEditorObj.content = draftMsg.content;
+      } else {
+        this.$router.push('/editor')
+      }
+
+    } else {
+      // 清空界面内容
+      this.mdEditorObj.title = '';
+      this.mdEditorObj.content = '';
+    }
   }
 }
 </script>
 
 <style>
-
 header {
   height: 64px;
   background-color: white;
@@ -206,5 +275,40 @@ header {
 .icon-style {
   font-size: 20px;
   color: rgb(179, 179, 179);
+}
+
+.editor-tip-bar {
+  height: 24px;
+  position: fixed;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.699);
+  width: 100vw;
+  border-top: 1px rgb(226, 226, 226) solid;
+  padding: 0 20px;
+  font-size: 12px;
+  line-height: 24px;
+}
+.lb-tips {
+  float: left;
+}
+
+.rb-btns {
+  float: right;
+  margin-right: 60px;
+}
+
+.rb-btns div {
+  float: left;
+  margin-left: 20px;
+  color: black;
+  height: 24px;
+}
+
+.spec-span {
+  display: inline-block;
+}
+.spec-span2 {
+  display: inline-block;
+  height: 24px;
 }
 </style>
