@@ -22,7 +22,7 @@
         </div>
 
         <div class="course-list" v-for="(item,index) in list" :key="index">
-          <img :src=require(item.book) />
+          <img :src="item.book"/>
           <div class="course-list-info">
 
             <p>{{item.title}}</p>
@@ -106,7 +106,9 @@
         var scrollHeight = Math.ceil(Math.max(document.body.clientHeight,document.documentElement.scrollHeight))
         console.log(clientHeight,scrollTop,scrollHeight)
         if(scrollTop + clientHeight >= scrollHeight-10){
+          this.pageNum++
           this.loadData()
+          
         }
       }
     },
@@ -244,5 +246,10 @@
   }
   .active{
     color: #ff8412!important;
+  }
+  .desc{
+    width: 100%;
+
+    overflow: hidden;
   }
 </style>
