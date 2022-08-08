@@ -5,7 +5,7 @@
       <div class="firstline">
         <div class="date">
           <i class="iconfont icon-rili"></i>
-          <span>下午好!</span>
+          <span>{{ dateTime }}!</span>
         </div>
         <el-button round>去签到</el-button>
       </div>
@@ -160,6 +160,18 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    dateTime() {
+      const houer = new Date().getHours();
+      if (houer >= 20 || houer < 6) {
+        return "晚上好";
+      } else if (houer >= 6 && houer < 12) {
+        return "上午好";
+      } else if (houer >= 12 && houer < 20) {
+        return "下午好";
+      }
+    },
   },
 };
 </script>

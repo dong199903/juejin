@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    homes
+    <TopNav></TopNav>
+    <Menu></Menu>
     <div class="container">
       <HomeArticleList></HomeArticleList>
     </div>
@@ -8,9 +9,10 @@
 </template>
 <script>
 import HomeArticleList from "@/views/homeArticleList";
-
+import TopNav from "@/components/TopNav";
+import Menu from "@/components/Menu";
 export default {
-  components: { HomeArticleList },
+  components: { HomeArticleList, TopNav, Menu },
 };
 </script>
 
@@ -19,5 +21,8 @@ export default {
   height: 100%;
   width: 100%;
   background-color: #f4f5f5;
+}
+.container {
+  margin-top: 8px;
 }
 </style>
