@@ -1,11 +1,34 @@
 <template>
-<div class="container">
-        <input type="text" placeholder="手机号">
-        <button>发送验证码</button>
-        <input type="text" placeholder="验证码">
-</div>
+  <div class="container">
+    <input type="file" name="file" @change="uploadFilds"/>
+  </div>
 </template>
+<script>
+import services from "@/utils/service"
+export default {
+  methods:{
+     uploadFilds:async(event)=>{
+      const files = event.target.files;
+      console.log(files[0])
+      const formDate = new FormData();
+     
+      formDate.append('file', files[0], files[0].name)
+      console.log(formDate)
 
+      let info = await services.post('upload/file',formDate,{
+        Headers:{
+          "Content-type":"multipart/form-data"
+        }
+      })
+      console.log(info)
+      // const response = await uploadFilds(formDate);
+      // if (response.code === 1) {
+      //   console.log("文件上传成功！");
+      // }
+    }
+  }
+}
+</script>
 <style>
     .container{
         position: relative;

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
-
+import Test from "@/views/Test"
 import Home from "@/views/Home"
 import Detail from "@/views/Detail"
 import Shopping from "@/views/Shopping"
@@ -74,6 +74,11 @@ const router = new Router({
       name: "Course",
       path: "/course",
       component:Course
+    },
+    {
+      name: "Test",
+      path: "/test",
+      component:Test
     }
   ]
 })

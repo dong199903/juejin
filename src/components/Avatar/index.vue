@@ -29,33 +29,35 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-// import { useStore } from 'vuex'
-// import { useRouter } from 'vue-router'
 
-// const store = useStore()
-// const router = useRouter()
+import router from "@/router/index"
+import {del} from "@/utils/storage"
 
-// const logout = () => {
-//   ElMessageBox.confirm('确认要退出登陆吗?', '警告', {
-//     confirmButtonText: '确认',
-//     cancelButtonText: '取消',
-//     type: 'warning'
-//   })
-//     .then(() => {
-//       store.dispatch('app/logout')
-//       ElMessage({
-//         type: 'success',
-//         message: '退出成功'
-//       })
-//     })
-//     .catch(() => {
-//       ElMessage({
-//         type: 'info',
-//         message: '已取消'
-//       })
-//     })
-// }
+
+const logout = () => {
+  console.log("quit")
+  // ElMessageBox.confirm('确认要退出登陆吗?', '警告', {
+  //   confirmButtonText: '确认',
+  //   cancelButtonText: '取消',
+  //   type: 'warning'
+  // })
+  //   .then(() => {
+  //     del("token")
+  //     ElMessage({
+  //       type: 'success',
+  //       message: '退出成功'
+  //     })
+  //     setTimeout(() => {
+  //       router.push("/otherlogin")
+  //     }, 1500);
+  //   })
+  //   .catch(() => {
+  //     ElMessage({
+  //       type: 'info',
+  //       message: '已取消'
+  //     })
+  //   })
+}
 // const handleCommand = (command) => {
 //   if (command === '/editor') {
 //     router.push('/editor')

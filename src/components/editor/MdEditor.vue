@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import services from "@/utils/service"
 export default {
     name: 'mdEditor',
     data() {
@@ -23,19 +24,20 @@ export default {
     // },
     methods: {
         // v-md-editor 文件上传
-        handleUploadImage(event, insertImage, files) {
-            // console.log(files);
+        async handleUploadImage(event, insertImage, files) {
             // 上传
             for (let i = 0; i < files.length; i++) {
-                this.crud.upload(files[i], "image/vMdEditor/").then(res => {
-                    // 获取返回数据
-                    let data = res.data.data;
-                    // 添加图片到内容
-                    insertImage({
-                        url: data.url,
-                        desc: data.name
-                    });
-                });
+              const formDate = new FormData();
+              formDate.append('file', files[i], files[i].name)
+              let info = await services.post('upload/file',formDate,{
+                Headers:{
+                  "Content-type":"multipart/form-data"
+                }
+              })
+              insertImage({
+                url: info.data,
+                desc: info.data
+              });
             }
         },
     },

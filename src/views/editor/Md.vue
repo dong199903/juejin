@@ -104,6 +104,9 @@ export default {
     }
   },
   methods: {
+    handleUploadImage(){
+      console.log("upload file")
+    },
     saveArticle() {
       if (!this.$route.params.postId) {
         this.$parent.refreshLock = true;
