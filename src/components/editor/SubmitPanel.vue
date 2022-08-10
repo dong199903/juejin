@@ -27,11 +27,11 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="文章封面:">
-                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+                    <el-upload class="avatar-uploader" action="http://127.0.0.1:9999/api/upload/file"
                         :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                         <img v-if="formMsg.imageUrl" :src="formMsg.imageUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        <div class="upload-img-tips">上传封面</div>
+                        <div class="upload-img-tips" v-if="formMsg.imageUrl == ''">上传封面</div>
                     </el-upload>
                     <div class="cover-tips">建议尺寸：1303*734px</div>
                 </el-form-item>
@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import { marked } from 'marked'
+
 export default {
     data() {
         return {
@@ -133,7 +135,9 @@ export default {
             this.$parent.showSP();
         },
         handleAvatarSuccess(res, file) {
-            this.imageUrl = URL.createObjectURL(file.raw);
+            // console.log(res, file);
+            this.formMsg.imageUrl = res.data;
+            // this.formMsg.imageUrl = URL.createObjectURL(file.raw);
         },
         beforeAvatarUpload(file) {
             const isJPG = file.type === 'image/jpeg';
@@ -149,7 +153,6 @@ export default {
         },
         // 提交表单
         submitEditor(formMsg) {
-
             this.$refs[formMsg].validate((valid) => {
                 if (valid) {
                     // 验证通过
@@ -165,6 +168,7 @@ export default {
                         coverUrl: this.formMsg.imageUrl,
                         postId: this.$route.params.postId,
                         content: this.content,
+                        contentHTML: marked(this.content),
                         type: this.formMsg.type,
                         collection: this.formMsg.collection,
                         editor: this.submitType,
@@ -173,7 +177,7 @@ export default {
                     // 提交后台！！！
                     console.log(data);
                     // 简单调用 vuex
-                    this.$store.commit("ADD_POST",data);
+                    this.$store.commit("ADD_POST", data);
                     this.$router.push('/editor');
 
                 } else {
@@ -192,7 +196,6 @@ export default {
     created() {
         this.formMsg.abstract = this.content.replaceAll('\n', " ").slice(0, 100).trim();
     },
-    mounted() { }
 }
 </script>
 
@@ -276,7 +279,7 @@ export default {
 
 .avatar {
     width: 178px;
-    height: 178px;
+    height: 100px;
     display: block;
 }
 
