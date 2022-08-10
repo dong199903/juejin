@@ -77,6 +77,7 @@
 
 <script>
 
+import { marked } from 'marked'
 
 import MdEditor from '@/components/editor/MdEditor';
 import SubmitPanel from '@/components/editor/SubmitPanel';
@@ -125,6 +126,7 @@ export default {
           "postId": this.$route.params.postId,
           "title": this.mdEditorObj.title,
           "content": this.mdEditorObj.content,
+          "contentHTML": marked(this.mdEditorObj.content),
           "editor": 'markdown',
           "username": "admin",
           "status": 0
@@ -137,6 +139,10 @@ export default {
         setTimeout(function () {
           _self.headerTip = "保存成功"
         }, 500)
+
+
+        // test
+        // console.log(marked(this.mdEditorObj.content));
       }
     },
     toRich() {

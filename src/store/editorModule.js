@@ -10,8 +10,10 @@ const editorModule = {
     mutations: {
         ADD_POST: (state, newPost) => {
             const temp = get("post");
-            if (temp) {
+            if (temp != undefined) {
                 state.post = temp;
+            } else {
+                set("post", {});
             }
             state.post['post' + newPost.postId] = newPost;
             console.log(state.post);
@@ -19,11 +21,13 @@ const editorModule = {
         },
         ADD_DRAFT: (state, obj) => {
             const temp = get("draft");
-            if (temp) {
+            if (temp != undefined) {
                 state.draft = temp;
+            } else {
+                set("draft", {});
             }
+            console.log(state.draft);
             state.draft['draft' + obj.postId] = obj;
-            // console.log(state.draft);
             set("draft", state.draft);
         },
         GET_DRAFT_ITEM(state, pid) {
