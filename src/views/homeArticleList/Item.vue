@@ -10,7 +10,7 @@
         >
           <template #reference>
             <div>
-              <a>{{ source.nickname }} </a>
+              <a style="padding: 0 8px 0 0">{{ source.nickname }} </a>
             </div>
           </template>
           <template #default>
@@ -21,7 +21,7 @@
               <div class="headerline" style="display: flex">
                 <el-avatar
                   :size="60"
-                  src="src / views / homeArticleList / img / qianDuanLanBo.jpg"
+                  src="https://p26-passport.byteacctimg.com/img/user-avatar/da0521c2de64e55cd974f2c7aa6d5e16~300x300.image"
                   style="margin-bottom: 8px"
                 />
                 <div style="flex: 1">
@@ -83,11 +83,15 @@
             </div>
           </template>
         </el-popover>
-        <span>{{ source.created_at }}</span>
-        <span v-for="(i, index2) in source.tags" :key="i.tag_id"
-          >{{ i.tag_name }}
-          <i v-if="index2 !== source.tags.length - 1">·</i></span
-        >
+        <span>
+          <i>|</i>
+          <i style="padding: 0 8px">{{ source.created_at }}</i>
+          <i>|</i>
+        </span>
+        <span v-for="(i, index2) in source.tags" :key="i.tag_id">
+          <i style="padding: 0 8px">{{ i.tag_name }}</i>
+          <i v-if="index2 !== source.tags.length - 1">·</i>
+        </span>
       </div>
       <span class="closebtn">
         <i class="iconfont icon-close2"></i>
@@ -98,7 +102,7 @@
         <h3 class="ellipsis">
           {{ source.title }}
         </h3>
-        <p class="ellipsis">
+        <p>
           {{ source.describe }}
         </p>
         <div class="moren-btn">
@@ -131,7 +135,6 @@ export default {
   name: "item-component",
   props: {
     source: {
-      // here is: {uid: 'unique_1', text: 'abc'}
       type: Object,
       default() {
         return {};
@@ -145,7 +148,7 @@ export default {
 /* 文章列表 */
 .entry {
   width: 100%;
-  padding: 16px 0;
+  padding: 20px 0;
   border-bottom: 1px solid #f4f4f4;
 }
 .entry-header {
@@ -155,19 +158,14 @@ export default {
 }
 .entry-header .user-Info {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  justify-content: start;
 }
 
 .entry-header .user-Info .el-popover {
   margin-right: 10px;
 }
 .entry-header .user-Info span {
-  margin-left: 10px;
   font-size: 12px;
-}
-.entry-header .user-Info span a {
-  font-size: 18px;
 }
 .entry-main {
   display: flex;
@@ -179,7 +177,7 @@ export default {
 }
 .entry-main .article-text {
   width: 500px;
-  height: 97px;
+  height: 77px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -188,6 +186,9 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+.entry-main .article-text .ellipsis {
+  font-weight: bolder;
 }
 .entry-main .article-text .moren-btn .iconhouver :hover {
   color: #1e80ff;

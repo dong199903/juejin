@@ -12,7 +12,11 @@
     </nav>
     <div class="contain">
       <ul>
-        <li v-for="(item, index) in articlelist" :key="index">
+        <li
+          v-for="(item, index) in $store.state.articleList"
+          :key="index"
+          @click="toDetail(item.article_id)"
+        >
           <Item :source="item"></Item>
         </li>
       </ul>
@@ -25,95 +29,55 @@ import Item from "./Item.vue";
 export default {
   data() {
     return {
-      items: [
-        { uid: "1", text: "abc" },
-        { uid: "2", text: "xyz" },
-        { uid: "3", text: "abc" },
-        { uid: "4", text: "xyz" },
-        { uid: "5", text: "abc" },
-        { uid: "6", text: "xyz" },
-        { uid: "7", text: "abc" },
-        { uid: "8", text: "xyz" },
-        { uid: "9", text: "abc" },
-        { uid: "10", text: "xyz" },
-        { uid: "11", text: "abc" },
-        { uid: "12", text: "xyz" },
-      ],
-      articlelist: [
-        {
-          nickname: "饭店前端",
-          avater: require("./img/qianDuanLanBo.jpg"),
-          created_at: "1天前",
-          tags: [
-            {
-              tag_id: "123",
-              tag_name: "前端",
-            },
-            {
-              tag_id: "124",
-              tag_name: "JavaScript",
-            },
-          ],
-          article_id: "abcdefg",
-          title: "啊对对对的掘金|青训营笔记",
-          describe: "啊对对对对",
-          view: "123",
-          up_num: "999",
-          up_status: false,
-          coppent_num: "999",
-          img: require("@/assets/imgs/duiduidui.jpg"),
-        },
-        {
-          nickname: "饭店前端",
-          avater: require("./img/qianDuanLanBo.jpg"),
-          created_at: "1天前",
-          tags: [
-            {
-              tag_id: "123",
-              tag_name: "前端",
-            },
-            {
-              tag_id: "124",
-              tag_name: "JavaScript",
-            },
-          ],
-          article_id: "abcdefg",
-          title: "啊对对对的掘金|青训营笔记",
-          describe: "啊对对对对",
-          view: "123",
-          up_num: "999",
-          up_status: false,
-          coppent_num: "999",
-          img: require("@/assets/imgs/duiduidui.jpg"),
-        },
-        {
-          nickname: "饭店前端",
-          avater: require("./img/qianDuanLanBo.jpg"),
-          created_at: "1天前",
-          tags: [
-            {
-              tag_id: "123",
-              tag_name: "前端",
-            },
-            {
-              tag_id: "124",
-              tag_name: "JavaScript",
-            },
-          ],
-          article_id: "abcdefg",
-          title: "啊对对对的掘金|青训营笔记",
-          describe: "啊对对对对",
-          view: "123",
-          up_num: "999",
-          up_status: false,
-          coppent_num: "999",
-          img: require("@/assets/imgs/duiduidui.jpg"),
-        },
-      ],
+      count: 0,
+      mostCount: 14,
     };
   },
   components: {
     Item,
+  },
+  methods: {
+    // 触底触发函数
+    listenBottomOut() {
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      const clientHeight = document.documentElement.clientHeight;
+      const scrollHeight = document.documentElement.scrollHeight;
+      if (scrollTop + clientHeight >= scrollHeight) {
+        // 没有数据后，不触发请求
+        if (this.count < this.mostCount) {
+          this.count += 1;
+          this.getArticleList();
+        }
+        return;
+      }
+    },
+    //获取文章列表
+    getArticleList() {
+      this.$store.dispatch("getArticleList", this.count);
+    },
+    //跳转到详情页
+    toDetail(article_id) {
+      this.$router.push({
+        name: "Detail",
+        params: { id: article_id },
+      });
+    },
+  },
+  computed: {
+    correntlist() {
+      let arr = this.articlelist.slice(0, this.count);
+      return arr;
+    },
+  },
+  mounted() {
+    this.getArticleList();
+    // 事件监听
+    window.addEventListener("scroll", this.listenBottomOut);
+  },
+  destroyed() {
+    // 离开页面取消监听
+    window.removeEventListener("scroll", this.listenBottomOut, false);
   },
 };
 </script>
@@ -121,12 +85,13 @@ export default {
 <style scoped>
 .articlelist {
   width: 700px;
+
   background-color: #fff;
 }
 .articlelist nav {
   border-bottom: 1px solid #f4f4f4;
   height: 30px;
-  padding: 10px 20px;
+  padding: 8px 10px;
   display: flex;
   align-items: center;
 }
