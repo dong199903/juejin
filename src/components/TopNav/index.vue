@@ -158,25 +158,38 @@ export default {
                 return (searchHistory.title.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
             };
         },
-        //点击历史搜索的数据，获取到点击的数据，此处应加查询跳转事件
+        //点击历史搜索的数据，获取到点击的数据
         handleSelect(item) {
             console.log(item);
             if (item.id === 1) {
                 console.log("点击到搜索历史了");
                 this.keyword = "";
             }
-
+            //点击历史搜索，跳转搜索结果页
+            this.$router.push({
+                path: "/",
+                query: {
+                    search_val: item.title,
+                },
+            }).catch(err => {});
         },
         //回车，点击事件，此处应查询与输入匹配的title
         setIntoStorage(event) {
             if (event) {
-                event.target.blur()
+                event.target.blur();
             }
-            if (!this.keyword.trim()) return alert('输入不能为空')
+            if (!this.keyword.trim()) return alert('请输入搜索内容');
             //将用户的输入包装成一个histroyObj对象
             const histroyObj = { id: nanoid(), title: this.keyword }
             this.searchHistory.unshift(histroyObj)
-            //此处添加搜索功能
+            //跳转到搜索结果页
+            this.$router.push({
+                path: "/",
+                query: {
+                    search_val: this.keyword,
+                },
+            }).catch(err => console.log(err));
+            // console.log(this);
         },
         //清空历史搜索记录
         empty() {
