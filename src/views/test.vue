@@ -1,11 +1,27 @@
 <template>
-<div class="container">
-        <input type="text" placeholder="手机号">
-        <button>发送验证码</button>
-        <input type="text" placeholder="验证码">
-</div>
+  <div class="container" v-html="text">
+    
+  </div>
 </template>
-
+<script>
+import {get} from "@/utils/storage"
+export default {
+  data(){
+    return {
+      text:""
+    }
+  },
+  mounted(){
+    //获取一盘文章，渲染到页面
+    let artile = get('post').post5412491660142478556.contentHTML
+    console.log(artile)
+    this.text = artile
+  },
+  methods:{
+     
+  }
+}
+</script>
 <style>
     .container{
         position: relative;

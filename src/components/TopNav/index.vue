@@ -21,12 +21,12 @@
                             </el-menu-item>
                         </template>
                         <el-menu-item>
-                            <a target="_blank" href="https://juejin.cn/app?utm_source=jj_nav">
+                            <a  href="https://juejin.cn/app?utm_source=jj_nav">
                                 APP
                             </a>
                         </el-menu-item>
                         <el-menu-item>
-                            <a target="_blank" href="https://juejin.cn/extension?utm_source=jj_nav">
+                            <a  href="https://juejin.cn/extension?utm_source=jj_nav">
                                 插件
                             </a>
                         </el-menu-item>
@@ -102,28 +102,13 @@ const menuList = [
         path: '/'
     },
     {
-        title: '沸点',
-        id: 2,
-        path: '/pins'
-    },
-    {
         title: '课程',
-        id: 3,
+        id: 2,
         path: '/course'
     },
     {
-        title: '直播',
-        id: 4,
-        path: '/live'
-    },
-    {
-        title: '活动',
-        id: 6,
-        path: '/events/all'
-    },
-    {
         title: '商城',
-        id: 7,
+        id: 3,
         path: '/shop'
     },
 ]

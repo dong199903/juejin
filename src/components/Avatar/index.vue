@@ -1,5 +1,6 @@
 <template>
-  <el-dropdown @command.prevent="handleCommand" >
+  <div>
+    <el-dropdown>
     <span class="el-dropdown-link">
       <el-avatar>
         <img src="../../assets/头像.jpg" alt />
@@ -7,10 +8,10 @@
     </span>
     <template #dropdown >
       <el-dropdown-menu class="menu" >
-        <el-dropdown-item icon="el-icon-edit" command="/editor"> 写文章 </el-dropdown-item>
-        <el-dropdown-item icon="el-icon-document"> 草稿箱 </el-dropdown-item>
-        <el-divider></el-divider>
+        <el-dropdown-item icon="el-icon-edit" > <router-link to="/editor" tag="span">写文章</router-link> </el-dropdown-item>
         <el-dropdown-item icon="el-icon-user">我的主页</el-dropdown-item>
+        <el-divider></el-divider>
+        
         <el-dropdown-item icon="el-icon-s-promotion">我赞过的</el-dropdown-item>
         <el-dropdown-item icon="el-icon-reading">我的课程 </el-dropdown-item>
         <el-dropdown-item icon="el-icon-postcard">我的优惠券 </el-dropdown-item>
@@ -22,45 +23,47 @@
         <el-divider></el-divider>
         <el-dropdown-item icon="el-icon-s-tools">设置</el-dropdown-item>
         <el-dropdown-item icon="el-icon-question">关于</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-switch-button" @click.prevent="logout">退出</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-switch-button" ><span @click="logout">退出</span></el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
+    <el-dialog
+      title="退出登录"
+      :visible.sync="dialogVisible"
+      width="30%"
+      >
+      <span>您确定退出登录？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="quit">确 定</el-button>
+      </span>
+    </el-dialog>
+  </div>
+  
 </template>
 
 <script setup>
-import { ref } from 'vue'
-// import { useStore } from 'vuex'
-// import { useRouter } from 'vue-router'
+import { Message } from 'element-ui';
+import router from "@/router/index"
+import {del} from "@/utils/storage"
+import {ref} from "vue"
+const dialogVisible = ref(false)
+const logout = () => {
+  dialogVisible.value = true
+}
+const quit = () => {
+  dialogVisible.value = false
+  del("token")
+  Message({
+    type: 'success',
+    message: '退出成功'
+  })
+  setTimeout(() => {
+    router.push("/otherlogin")
+  }, 1500);
+    
+}
 
-// const store = useStore()
-// const router = useRouter()
-
-// const logout = () => {
-//   ElMessageBox.confirm('确认要退出登陆吗?', '警告', {
-//     confirmButtonText: '确认',
-//     cancelButtonText: '取消',
-//     type: 'warning'
-//   })
-//     .then(() => {
-//       store.dispatch('app/logout')
-//       ElMessage({
-//         type: 'success',
-//         message: '退出成功'
-//       })
-//     })
-//     .catch(() => {
-//       ElMessage({
-//         type: 'info',
-//         message: '已取消'
-//       })
-//     })
-// }
-// const handleCommand = (command) => {
-//   if (command === '/editor') {
-//     router.push('/editor')
-//   }
-// }
 </script>
 
 <style scoped>

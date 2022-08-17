@@ -9,8 +9,8 @@
 </template>
 <script>
 import HomeArticleList from "@/views/homeArticleList";
-import TopNav from "@/components/TopNav";
-import Menu from "@/components/Menu";
+import TopNav from '@/components/TopNav/index.vue';
+import Menu from '@/components/Menu/index.vue';
 export default {
   components: { HomeArticleList, TopNav, Menu },
 };
