@@ -1,31 +1,24 @@
 <template>
-  <div class="container">
-    <input type="file" name="file" @change="uploadFilds"/>
+  <div class="container" v-html="text">
+    
   </div>
 </template>
 <script>
-import services from "@/utils/service"
+import {get} from "@/utils/storage"
 export default {
-  methods:{
-     uploadFilds:async(event)=>{
-      const files = event.target.files;
-      console.log(files[0])
-      const formDate = new FormData();
-     
-      formDate.append('file', files[0], files[0].name)
-      console.log(formDate)
-
-      let info = await services.post('upload/file',formDate,{
-        Headers:{
-          "Content-type":"multipart/form-data"
-        }
-      })
-      console.log(info)
-      // const response = await uploadFilds(formDate);
-      // if (response.code === 1) {
-      //   console.log("文件上传成功！");
-      // }
+  data(){
+    return {
+      text:""
     }
+  },
+  mounted(){
+    //获取一盘文章，渲染到页面
+    let artile = get('post').post5412491660142478556.contentHTML
+    console.log(artile)
+    this.text = artile
+  },
+  methods:{
+     
   }
 }
 </script>

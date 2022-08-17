@@ -10,6 +10,6 @@ export default {
 </script>
 
 <style>
-@import "@/assets/style/reset.css";
+/* @import "@/assets/style/reset.css"; */
 @import "@/assets/font/iconfont.css"
 </style>
