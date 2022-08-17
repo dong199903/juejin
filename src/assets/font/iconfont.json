@@ -6,6 +6,7 @@
   "description": "仿掘金官网项目",
   "glyphs": [
     {
+<<<<<<< HEAD
       "icon_id": "14007852",
       "name": "lv2",
       "font_class": "icon-test",
@@ -27,6 +28,8 @@
       "unicode_decimal": 58907
     },
     {
+=======
+>>>>>>> zhengduo
       "icon_id": "1312011",
       "name": "转换",
       "font_class": "zhuanhuan",
