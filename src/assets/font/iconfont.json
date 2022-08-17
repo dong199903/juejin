@@ -6,6 +6,41 @@
   "description": "仿掘金官网项目",
   "glyphs": [
     {
+      "icon_id": "14007852",
+      "name": "lv2",
+      "font_class": "icon-test",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "14007853",
+      "name": "lv3",
+      "font_class": "icon-test1",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "14007854",
+      "name": "lv1",
+      "font_class": "icon-test2",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "1312011",
+      "name": "转换",
+      "font_class": "zhuanhuan",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "900870",
+      "name": "close-2",
+      "font_class": "close2",
+      "unicode": "e6dd",
+      "unicode_decimal": 59101
+    },
+    {
       "icon_id": "77697",
       "name": "点赞",
       "font_class": "dianzan",
