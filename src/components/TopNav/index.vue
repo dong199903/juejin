@@ -169,9 +169,9 @@ export default {
             this.searchHistory.unshift(histroyObj)
             //跳转到搜索结果页
             this.$router.push({
-                path: "/",
-                query: {
-                    search_val: this.keyword,
+                name: "Search",
+                params: {
+                  query: this.keyword,
                 },
             }).catch(err => console.log(err));
             // console.log(this);

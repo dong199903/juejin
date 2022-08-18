@@ -1,8 +1,8 @@
 <template>
   <div class="icons">
-    <div class="iconfont icon-dianzan"><span>1</span></div>
-    <div class="iconfont icon-huifu"><span>2</span></div>
-    <div @click="save" class="iconfont icon-shoucang"></div>
+    <div @click="changeLove" class="iconfont icon-dianzan" :class="zan.love?'active':''"><span>{{zan.likes}}</span></div>
+    <div class="iconfont icon-huifu"><span>{{ping}}</span></div>
+    <div @click="changeCang"  class="iconfont icon-shoucang" :class="cang?'active':''"></div>
     <div class="iconfont icon-fenxiang">
       <div class="share">
         <div><i class="iconfont icon-weixin"></i><span>微信</span></div>
@@ -16,18 +16,51 @@
 </template>
 <script>
 import { Message } from 'element-ui';
+
 export default {
   data(){
     return {
-     
+     pid:""
+    }
+  },
+  created(){
+    this.pid = this.$route.params.id 
+  },
+  computed:{
+    //收藏
+    cang(){
+      let res = this.$store.state.editorModule.post 
+      let post = res.find(item=>item.postId==this.$route.params.id)
+      console.log(post.cang)
+      return post.cang
+    },
+    //点赞
+    zan(){
+      let res = this.$store.state.editorModule.post 
+      let post = res.find(item=>item.postId==this.$route.params.id)
+      return {
+        likes:post.likes,
+        love:post.love
+      }
+    },
+    //评论数目
+    ping(){
+      let res = this.$store.state.editorModule.post 
+      let post = res.find(item=>item.postId==this.$route.params.id)
+      if(post.commentList) return post.commentList.length 
+      return 0
     }
   },
   methods:{
     //收藏与取消收藏
-    save:()=>{
-      Message.success("搜藏成功")
+    changeLove(){
+      this.$store.commit("LOVE",this.pid)
+    },
+    changeCang(){
+      this.$store.commit("CANG",this.pid)
     }
   }
+  
 }
 </script>
 <style scoped>
@@ -78,5 +111,7 @@ export default {
   .share>div>i{
     margin-right: 10px;
   }
-  
+  .active{
+    color:#1e80ff!important;
+  }
 </style>

@@ -13,9 +13,9 @@
     <div class="contain">
       <ul>
         <li
-          v-for="(item, index) in $store.state.articleList"
+          v-for="(item, index) in list"
           :key="index"
-          @click="toDetail(item.article_id)"
+          @click="toDetail(item.postId)"
         >
           <Item :source="item"></Item>
         </li>
@@ -29,8 +29,7 @@ import Item from "./Item.vue";
 export default {
   data() {
     return {
-      count: 0,
-      mostCount: 14,
+      data:[]
     };
   },
   components: {
@@ -44,17 +43,12 @@ export default {
       const clientHeight = document.documentElement.clientHeight;
       const scrollHeight = document.documentElement.scrollHeight;
       if (scrollTop + clientHeight >= scrollHeight) {
-        // 没有数据后，不触发请求
-        if (this.count < this.mostCount) {
-          this.count += 1;
-          this.getArticleList();
-        }
-        return;
+        this.getArticleList();
       }
     },
     //获取文章列表
     getArticleList() {
-      this.$store.dispatch("getArticleList", this.count);
+      this.$store.commit("GET_NUM_LIST")
     },
     //跳转到详情页
     toDetail(article_id) {
@@ -65,10 +59,11 @@ export default {
     },
   },
   computed: {
-    correntlist() {
-      let arr = this.articlelist.slice(0, this.count);
-      return arr;
-    },
+    //当前需要展示的数据
+    list(){
+      console.log(this.$store.state.editorModule.show)
+      return this.$store.state.editorModule.show
+    }
   },
   mounted() {
     this.getArticleList();
@@ -85,7 +80,7 @@ export default {
 <style scoped>
 .articlelist {
   width: 700px;
-
+  margin:0 auto;
   background-color: #fff;
 }
 .articlelist nav {

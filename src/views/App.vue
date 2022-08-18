@@ -9,8 +9,5 @@
     width: 100%;
     height: 100%vh;
   }
-  li{
-    list-style: none;
-    text-decoration: none;
-  }
+  
 </style>

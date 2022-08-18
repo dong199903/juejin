@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
-import Test from "@/views/Test"
 import Home from "@/views/Home"
 import Detail from "@/views/Detail"
 import Shopping from "@/views/Shopping"
@@ -9,8 +8,10 @@ import PhoneLogin from "@/views/login/PhoneLogin"
 import OtherLogin from "@/views/login/OtherLogin"
 import PhoneResetPwd from "@/views/login/PhoneResetPwd"
 import EmailResetPwd from "@/views/login/EmailResetPwd"
-
+import Search from "@/views/Search"
 import Course from "@/views/Course"
+import Me from "@/views/Me"
+
 import {get} from "@/utils/storage"
 
 import { Message } from 'element-ui';
@@ -76,9 +77,14 @@ const router = new Router({
       component:Course
     },
     {
-      name: "Test",
-      path: "/test",
-      component:Test
+      name: "Search",
+      path: "/search/:query",
+      component:Search
+    },
+    {
+      name: "Me",
+      path: "/me",
+      component:Me
     }
   ]
 })

@@ -175,7 +175,7 @@ export default {
                         status: 1
                     }
                     // 提交后台！！！
-                    console.log(data);
+                    console.log("后台提交",data);
                     // 简单调用 vuex
                     this.$store.commit("ADD_POST", data);
                     this.$router.push('/editor');
@@ -186,7 +186,6 @@ export default {
                 }
             });
         },
-
     },
     watch: {
         'formMsg.abstract': function () {
@@ -199,7 +198,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .sj {
     width: 12px;
     height: 12px;

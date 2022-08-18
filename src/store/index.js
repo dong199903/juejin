@@ -10,26 +10,10 @@ const state = {
 }
 
 const mutations = {
-	GETARTICLELIST(state, articleList) {
-		state.articleList = [...state.articleList, ...articleList];
-	}
+	
 }
 
-const actions = {
-	async getArticleList({ commit }, count) {
-		let res = await services({
-			method: 'get',
-			url: '/article/articlelist',
-			params: {
-				count
-			}
-		});
-		console.log(res)
-		if (res.code == 200) {
-			commit('GETARTICLELIST', res.data.articlelist)
-		}
-	}
-}
+
 
 const modules = {
 	editorModule
@@ -37,7 +21,6 @@ const modules = {
 
 export default new Vuex.Store({
 	state,
-	actions,
 	mutations,
 	modules,
 })

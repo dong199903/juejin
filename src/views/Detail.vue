@@ -3,9 +3,23 @@
     <div class="detail-main">
       <div class="detail-main-left">
         <!--渲染的文本-->
-        <div class="title">{{artile.title}}</div>
-        <div class="img"><img :src="artile.coverUrl"/></div>
-        <div class="container" v-html="artile.contentHTML">
+        <div class="title">{{post.title}}</div>
+        <div class="img"><img :src="post.coverUrl"/></div>
+        <div class="container" v-html="$xss(post.contentHTML)"></div>
+        <div></div>
+        <Comment/>
+        <div>
+          <h2>热门评论</h2>
+          <div v-if="post.commentList">
+            <div class="comment-item" v-for="(item,index) in post.commentList" :key="index">
+              <div class="author">
+                <div><img src="./../assets/头像.jpg"/><div>掘金运营助手</div></div>
+                <div>{{timeDeal(item.date).year}}-{{timeDeal(item.date).month}}-{{timeDeal(item.date).day}}</div>
+              </div>
+              <div>{{item.content}}</div>
+            </div>
+          </div>
+          
         </div>
       </div>
       <div class="detail-main-right">
@@ -16,15 +30,31 @@
         <div></div>
       </div>
     </div>
-    <IconBarVue/>
+    <IconBarVue :pid='this.$route.params.id'/>
   </div>
 </template>
 <script>
 import IconBarVue from '@/components/IconBar.vue'
+import Comment from "@/components/Comment.vue"
 import {get} from "@/utils/storage"
 export default {
   components:{
-    IconBarVue
+    IconBarVue,Comment
+  },
+  data(){
+    return {
+    }
+  },
+  created(){
+    //获取详细数据
+    
+  },
+  computed:{
+    post(){
+      let res = this.$store.state.editorModule.post 
+      let post = res.find(item=>item.postId==this.$route.params.id)
+      return post
+    }
   },
   data(){
     return {
@@ -32,14 +62,33 @@ export default {
     }
   },
   mounted(){
-    //获取一盘文章，渲染到页面
-    this.artile = get('post').post2007921660318062057
-    console.log(this.artile)
+    //获取详细文章
   },
+  methods:{
+    timeDeal(time) {
+      /**返回年月日,时分秒 */
+      let date = new Date(time)
+      let year = date.getFullYear()
+      let month = date.getMonth()+1
+      let day = date.getDate()
+      let hour = date.getHours()
+      let minutes = date.getMinutes()
+      let second = date.getSeconds()
+      return {
+        year,month,day,hour,minutes,second
+      }
+    }
+  }
 }
 </script>
 
-<style>
+<style scoped>
+  .title{
+    text-align: center;
+    margin: 15px 10px;
+    font-size: 28px;
+    font-weight: bold;
+  }
   .detail{
     width: 100%;
     height: 100%;
@@ -76,5 +125,26 @@ export default {
   .detail-main-right>div{
     background: #fff;
     margin-bottom: 20px;
+  }
+  .author{
+    display: flex;
+    justify-content: space-between;
+  }  .author img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }.author>div:first-child{
+    display: flex;
+    align-items: center;
+  }
+  .comment-item{
+    padding: 10px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+    border-top:1px solid #ccc;
+  }
+  h2{
+    font-size: 23px;
   }
 </style>

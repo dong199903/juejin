@@ -56,71 +56,7 @@
         <a href="#"> 完整榜单 <i class="iconfont icon-xiangyoujiantou"></i> </a>
       </footer>
     </div>
-    <div class="index-aside-footer">
-      <ul class="more-list">
-        <li class="item"><a href="#">用户协议</a></li>
-        <li class="item"><a href="#">营业执照</a></li>
-        <li class="item"><a href="#">隐私政策</a></li>
-        <li class="item"><a href="#">关于我们</a></li>
-      </ul>
-
-      <ul class="more-list">
-        <li class="item"><a href="#">站点地图</a></li>
-        <li class="item"><a href="#">使用指南 </a></li>
-        <li class="item"><a href="#">友情链接</a></li>
-        <li class="item"><a href="#">更多文章</a></li>
-      </ul>
-      <ul class="more-list">
-        <li class="item"><a href="#">京ICP备18012699号-3 </a></li>
-      </ul>
-      <ul class="more-list">
-        <li class="item">
-          <a href="">
-            <img
-              src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/img/police.d0289dc.png"
-              alt=""
-            />
-            京公网安备11010802026719号
-          </a>
-        </li>
-        <li><span>版权所有：北京北比信息技术有限公司</span></li>
-        <li><span>公司地址：北京市海淀区信息路甲28号13层B座13B-5</span></li>
-        <li><span>公司座机：010-83434395</span></li>
-        <li class="item">
-          <span> 举报邮箱：<a href="#">feedback@xitu.io</a> </span>
-        </li>
-        <li class="item"><a href=""></a></li>
-      </ul>
-      <ul class="more-list">
-        <li class="item"><a href="#">@2022 稀土掘金 </a></li>
-      </ul>
-      <ul class="more-list">
-        <li class="item">
-          <a href="#">
-            <img
-              src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/img/weibo.0cd39f5.png"
-              alt=""
-            />
-          </a>
-        </li>
-        <li class="item">
-          <a href="#">
-            <img
-              src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/img/wechat.ce329e6.png"
-              alt=""
-            />
-          </a>
-          <div class="qr-panel">
-            <div class="title">微信扫一扫</div>
-            <img
-              class="wechat-img"
-              src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/img/juejin-qr.b247fde.jpeg"
-              alt=""
-            />
-          </div>
-        </li>
-      </ul>
-    </div>
+    
   </div>
 </template>
 

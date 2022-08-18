@@ -4,7 +4,7 @@ import router from './router'
 import store from './store/'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-
+import VueXss from "vue-xss"
 
 import VueMarkdownEditor from './plugins/mdEditor'
 
@@ -25,6 +25,7 @@ Vue.use(VueLazyload, {
   loading: loadimage,
   attempt: 1
 })
+Vue.use(VueXss)
 
 new Vue({
   router, store,

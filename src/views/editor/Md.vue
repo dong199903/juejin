@@ -169,7 +169,8 @@ export default {
     if (pid) {
       // 获取草稿箱的内容
       this.$store.commit('REFRESH_ARTICLE_DATA')
-      const draftMsg = this.$store.state.editorModule.draft["draft" + pid]
+      const draftMsg = this.$store.commit("GET_DRAFT_ITEM",pid)
+      //const draftMsg = this.$store.state.editorModule.draft["draft" + pid]
       // console.log(draftMsg);
       if (draftMsg && draftMsg.username == "admin") {
         // 显示在界面
@@ -188,7 +189,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 header {
   height: 64px;
   background-color: white;
