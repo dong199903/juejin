@@ -15,7 +15,7 @@
         <div class="content">{{source.content}}</div>
         <div class="other">
           <div><i class="iconfont icon-kanguo"></i><span>{{source.watched}}</span></div>
-          <div><i class="iconfont icon-dianzan" ></i><span>{{source.likes}}</span></div>
+          <div><i class="iconfont icon-dianzan" :class="source.love?'actived':''" ></i><span>{{source.likes}}</span></div>
           <div><i class="iconfont icon-huifu"></i><span>{{source.comments}}</span></div>
         </div>
       </div>
@@ -115,5 +115,9 @@ img{
 .other i{
   margin-right: 4px;
   font-size: 19px;
+}
+.actived{
+  color: blue!important;
+  font-weight: bolder;
 }
 </style>

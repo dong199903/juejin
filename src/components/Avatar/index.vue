@@ -9,9 +9,8 @@
     <template #dropdown >
       <el-dropdown-menu class="menu" >
         <el-dropdown-item icon="el-icon-edit" > <router-link to="/editor" tag="span">写文章</router-link> </el-dropdown-item>
-        <el-dropdown-item icon="el-icon-user">我的主页</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-user"><router-link to="/me" tag="span">我的主页</router-link> </el-dropdown-item>
         <el-divider></el-divider>
-        
         <el-dropdown-item icon="el-icon-s-promotion">我赞过的</el-dropdown-item>
         <el-dropdown-item icon="el-icon-reading">我的课程 </el-dropdown-item>
         <el-dropdown-item icon="el-icon-postcard">我的优惠券 </el-dropdown-item>

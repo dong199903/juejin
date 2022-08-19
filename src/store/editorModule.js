@@ -7,9 +7,10 @@ const editorModule = {
       post: get("post") || [],
       draft: get("draft") || [],
       show:[],
-      size:7,
+      size:5,
       pageNum:0,
-      search:[]
+      search:[],
+      
     },
     mutations: {
         ADD_POST: (state, newPost) => {

@@ -26,25 +26,48 @@
 
 <script>
 import Item from "./Item.vue";
+import { Message } from 'element-ui';
+import debule from "@/utils/debunle"
 export default {
   data() {
     return {
-      data:[]
+      data:[],
+      len:0
     };
   },
   components: {
     Item,
   },
   methods: {
-    // 触底触发函数
-    listenBottomOut() {
+    // 触底触发函数-防抖处理
+    fn:debule(1500,function(){
       const scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop;
+      document.documentElement.scrollTop || document.body.scrollTop;
       const clientHeight = document.documentElement.clientHeight;
       const scrollHeight = document.documentElement.scrollHeight;
-      if (scrollTop + clientHeight >= scrollHeight) {
+      console.log(scrollTop,clientHeight,scrollHeight)
+      if (scrollTop + clientHeight + 30 >= scrollHeight) {
+      
+        Message.success("加载成功")
         this.getArticleList();
       }
+    }),
+    listenBottomOut() {
+      debule(1500,()=>{
+        const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+        const clientHeight = document.documentElement.clientHeight;
+        const scrollHeight = document.documentElement.scrollHeight;
+        console.log(scrollTop,clientHeight,scrollHeight)
+        if (scrollTop + clientHeight + 30 >= scrollHeight) {
+        
+          Message.success("加载成功")
+          this.getArticleList();
+        }
+      })      
+    },
+    scrollListen(){
+      debule(1500,this.listenBottomOut)
     },
     //获取文章列表
     getArticleList() {
@@ -68,11 +91,11 @@ export default {
   mounted() {
     this.getArticleList();
     // 事件监听
-    window.addEventListener("scroll", this.listenBottomOut);
+    window.addEventListener("scroll", this.fn);
   },
   destroyed() {
     // 离开页面取消监听
-    window.removeEventListener("scroll", this.listenBottomOut, false);
+    window.removeEventListener("scroll",this.fn);
   },
 };
 </script>
