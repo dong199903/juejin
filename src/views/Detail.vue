@@ -5,7 +5,7 @@
         <!--渲染的文本-->
         <div class="title">{{post.title}}</div>
         <div class="img"><img :src="post.coverUrl"/></div>
-        <div class="container" v-highlight v-html="$xss(post.contentHTML)"></div>
+        <div class="container"  v-html="$xss(post.contentHTML)"></div>
         <div></div>
         <Comment/>
         <div>
@@ -27,7 +27,7 @@
         <div><img src="@/assets/imgs/2.jpg"/></div>
         <div><img src="@/assets/imgs/3.jpg"/></div>
         <div><img src="@/assets/imgs/1.jpg"/></div>
-        <div></div>
+        <Group class="group"/>
       </div>
     </div>
     <IconBarVue :pid='this.$route.params.id'/>
@@ -36,11 +36,12 @@
 <script>
 import IconBarVue from '@/components/IconBar.vue'
 import Comment from "@/components/Comment.vue"
+import Group from "@/components/Group.vue"
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css'
 export default {
   components:{
-    IconBarVue,Comment
+    IconBarVue,Comment,Group
   },
   data(){
     return {
@@ -50,9 +51,7 @@ export default {
   mounted(){
     let mainContent = document.querySelector('.container');
     let blocks = mainContent.querySelectorAll('pre code');
-    console.log(blocks)
     blocks.forEach((block)=>{
-      console.log(block)
       hljs.highlightBlock(block)
     });
   },
@@ -150,5 +149,10 @@ export default {
   }
   .container img{
     width: 600px;
+  }
+
+  .group{
+    position: sticky;
+    top:0;
   }
 </style>
