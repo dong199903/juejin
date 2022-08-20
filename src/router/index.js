@@ -11,7 +11,7 @@ import EmailResetPwd from "@/views/login/EmailResetPwd"
 import Search from "@/views/Search"
 import Course from "@/views/Course"
 import Me from "@/views/Me"
-
+import Test from "@/views/Test"
 import {get} from "@/utils/storage"
 
 import { Message } from 'element-ui';
@@ -85,6 +85,12 @@ const router = new Router({
       name: "Me",
       path: "/me",
       component:Me
+    },
+
+    {
+      name: "Test",
+      path: "/test",
+      component:Test
     }
   ]
 })

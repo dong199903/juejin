@@ -29,7 +29,7 @@
           </el-tabs>
         </div>
       </div>
-      <img class="bgr" src="./../assets/bgr.jpg"/>
+      
     </div>
     
   </div>

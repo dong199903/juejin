@@ -11,7 +11,7 @@
 import HomeArticleList from "@/views/homeArticleList";
 import TopNav from '@/components/TopNav/index.vue';
 import Menu from '@/components/Menu/index.vue';
-
+let name = "dzp"
 export default {
   components: { HomeArticleList, TopNav, Menu },
 };

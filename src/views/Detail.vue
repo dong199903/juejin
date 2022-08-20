@@ -5,7 +5,7 @@
         <!--渲染的文本-->
         <div class="title">{{post.title}}</div>
         <div class="img"><img :src="post.coverUrl"/></div>
-        <div class="container" v-html="$xss(post.contentHTML)"></div>
+        <div class="container" v-highlight v-html="$xss(post.contentHTML)"></div>
         <div></div>
         <Comment/>
         <div>
@@ -36,18 +36,25 @@
 <script>
 import IconBarVue from '@/components/IconBar.vue'
 import Comment from "@/components/Comment.vue"
-import {get} from "@/utils/storage"
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-dark.css'
 export default {
   components:{
     IconBarVue,Comment
   },
   data(){
     return {
+
     }
   },
-  created(){
-    //获取详细数据
-    
+  mounted(){
+    let mainContent = document.querySelector('.container');
+    let blocks = mainContent.querySelectorAll('pre code');
+    console.log(blocks)
+    blocks.forEach((block)=>{
+      console.log(block)
+      hljs.highlightBlock(block)
+    });
   },
   computed:{
     post(){
@@ -60,9 +67,6 @@ export default {
     return {
       artile:{}
     }
-  },
-  mounted(){
-    //获取详细文章
   },
   methods:{
     timeDeal(time) {
@@ -95,9 +99,9 @@ export default {
     background: #f4f5f5
   }
   .detail-main{
-    max-width: 1100px;
+    max-width: 1000px;
     height: 100%;
-    margin: 0 auto;
+    margin-left: 300px;
     display: flex;
     justify-content: space-between;
     position: relative;
@@ -105,19 +109,19 @@ export default {
   .detail-main-right{
     width: 300px;
     margin-left: 20px;
-    
   }
   .detail-main-left{
-    flex: 1;
+    width: 900px;
     background: #fff;
     padding: 30px; 
     box-sizing: border-box;
+    overflow: hidden;
   }
   .detail-main-left>div{
     width: 100%;
   }
   .detail-main-left img{
-    width: 100%;
+    width: 700px !important;
   }
   .detail-main-right img{
     width: 100%;
@@ -144,7 +148,7 @@ export default {
     border-bottom: 1px solid #ccc;
     border-top:1px solid #ccc;
   }
-  h2{
-    font-size: 23px;
+  .container img{
+    width: 600px;
   }
 </style>
