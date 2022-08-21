@@ -133,7 +133,7 @@ export default {
     display: flex;
     justify-content: space-between;
   }  .author img{
-    width: 60px;
+    width: 60px !important;
     height: 60px;
     border-radius: 50%;
     margin-right: 10px;

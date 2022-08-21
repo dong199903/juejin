@@ -367,7 +367,7 @@ export default {
     justify-content: center;
     align-items: center;
     position: absolute;
-    right: 120px;
+    right: 110px;
 
 }
 
