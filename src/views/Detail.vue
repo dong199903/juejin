@@ -98,12 +98,9 @@ export default {
     background: #f4f5f5
   }
   .detail-main{
-    max-width: 1000px;
     height: 100%;
-    margin-left: 300px;
+    margin-left: 200px;
     display: flex;
-    justify-content: space-between;
-    position: relative;
   }
   .detail-main-right{
     width: 300px;
@@ -117,12 +114,6 @@ export default {
     overflow: hidden;
     padding-bottom: 400px;
   }
-  .detail-main-left>div{
-    width: 100%;
-  }
-  .detail-main-left img{
-    width: 700px !important;
-  }
   .detail-main-right img{
     width: 100%;
   }
@@ -133,6 +124,7 @@ export default {
   .author{
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }  .author img{
     width: 60px !important;
     height: 60px;
@@ -141,6 +133,7 @@ export default {
   }.author>div:first-child{
     display: flex;
     align-items: center;
+    margin-bottom: 15px;
   }
   .comment-item{
     padding: 10px;

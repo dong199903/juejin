@@ -104,6 +104,8 @@
   background-color: #FFFFFF;
   display: flex;
   flex-direction: column;
+  padding: 10px;
+
 }
  .title-box {
   height: 55px;
@@ -158,6 +160,11 @@
 }
 .level-3{
   margin-left: 20px;
+}
+.text{
+  text-overflow:ellipsis;   
+  overflow:hidden;   
+  white-space:nowrap; 
 }
 
 </style>
