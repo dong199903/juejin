@@ -158,6 +158,9 @@ export default {
   color: #4e5969;
 }
 /* 广告 */
+.advlist {
+  padding: 0;
+}
 .advlist li {
   position: relative;
   height: 200px;

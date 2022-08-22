@@ -115,6 +115,7 @@ export default {
     padding: 30px; 
     box-sizing: border-box;
     overflow: hidden;
+    padding-bottom: 400px;
   }
   .detail-main-left>div{
     width: 100%;

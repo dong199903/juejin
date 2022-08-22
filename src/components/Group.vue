@@ -139,11 +139,9 @@
 }
  .item-box .item.level-1 .text {
   color: #000;
-  padding-left: 16px;
 }
  .item-box .item.level-2 .text {
   color: #333;
-  padding-left: 30px;
 }
  .item-box .item.activate {
   color: #1E80FF;
