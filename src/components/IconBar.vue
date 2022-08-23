@@ -66,6 +66,7 @@ export default {
 <style scoped>
   .icons{
     position: fixed;
+    /* left: 150px; */
     top: 145px;
     display: flex;
     flex-direction: column;

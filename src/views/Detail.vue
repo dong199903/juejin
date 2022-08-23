@@ -101,7 +101,7 @@ export default {
   }
   .detail-main{
     height: 100%;
-    margin-left: 60px;
+    margin-left: 50px;
     display: flex;
   }
   .detail-main-right{

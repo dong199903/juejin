@@ -14,7 +14,7 @@
                     <el-radio-group v-model="formMsg.type" class="sp-form-type">
                         <!-- 子选项 -->
                         <span v-for="(typeItem, index) in formLabel.type" :key="index">
-                            <el-radio-button :label="typeItem"></el-radio-button>
+                            <el-radio-button :label="typeItem" class="sp-form-type-btn"></el-radio-button>
                         </span>
                     </el-radio-group>
                 </el-form-item>
@@ -33,7 +33,7 @@
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         <div class="upload-img-tips" v-if="formMsg.imageUrl == ''">上传封面</div>
                     </el-upload>
-                    <div class="cover-tips">建议尺寸：1303*734px</div>
+                    <div class="cover-tips" v-if="formMsg.imageUrl == ''">建议尺寸：1303*734px</div>
                 </el-form-item>
                 <el-form-item label="收录至专栏:">
                     <el-select v-model="formMsg.collection" filterable placeholder="请搜索添加专栏，同一篇文章最多添加三个专栏"
@@ -144,10 +144,10 @@ export default {
             const isLt2M = file.size / 1024 / 1024 < 2;
 
             if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
+                this.$message.error('上传封面图片只能是 JPG 格式!');
             }
             if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
+                this.$message.error('上传封面图片大小不能超过 2MB!');
             }
             return isJPG && isLt2M;
         },
@@ -157,7 +157,7 @@ export default {
                 if (valid) {
                     // 验证通过
                     const data = {
-                        username: "掘金酱",
+                        username: 123456,
                         date: Date.now(),
                         tag: this.formMsg.tag,
                         title: this.articleTitle,
@@ -167,7 +167,7 @@ export default {
                         comments: 0,
                         coverUrl: this.formMsg.imageUrl,
                         postId: this.$route.params.postId,
-                        content: this.content,
+                        content: this.formatContent(this.content),
                         contentHTML: marked(this.content),
                         type: this.formMsg.type,
                         collection: this.formMsg.collection,
@@ -175,10 +175,10 @@ export default {
                         status: 1
                     }
                     // 提交后台！！！
-                    console.log("后台提交",data);
+                    console.log("后台提交", data);
                     // 简单调用 vuex
                     this.$store.commit("ADD_POST", data);
-                    this.$router.push('/editor');
+                    this.$router.push(`/published?post=${this.$route.params.postId}&title=${this.articleTitle}`);
 
                 } else {
                     console.log('error submit!!');
@@ -186,6 +186,12 @@ export default {
                 }
             });
         },
+        formatContent(str) {
+            let oDiv = document.createElement('div');
+            oDiv.innerHTML = marked(str);
+            let text = oDiv.innerText;
+            return text.replaceAll('\n', " ").replaceAll('  ', " ").slice(0, 100).trim();
+        }
     },
     watch: {
         'formMsg.abstract': function () {
@@ -193,7 +199,11 @@ export default {
         },
     },
     created() {
-        this.formMsg.abstract = this.content.replaceAll('\n', " ").slice(0, 100).trim();
+        /* let oDiv = document.createElement('div');
+        oDiv.innerHTML = marked(this.content);
+        let text = oDiv.innerText;
+        console.log(text); */
+        this.formMsg.abstract = this.formatContent(this.content);
     },
 }
 </script>
@@ -238,8 +248,11 @@ export default {
     box-sizing: border-box;
 }
 
+.sp-form-type-btn span {
+    color: red;
+}
 .sp-form-type .el-radio-button__inner {
-    width: 90px;
+    min-width: 90px;
     height: 30px;
     padding: 0;
     margin: 0px 8px 16px 0;
@@ -247,6 +260,18 @@ export default {
     color: grey;
     background-color: rgb(248, 248, 248);
     text-align: center;
+    box-sizing: border-box;
+}
+
+.sp-form-type {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 380px;
+}
+.sp-form-type span {
+    margin-right: 20px;
+    margin-bottom: 10px;
 }
 
 .sp-form-type .el-radio-button__inner:hover {
@@ -255,7 +280,7 @@ export default {
 
 /* 图片上传 */
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
+    border: 1px dashed #050505;
     border-radius: 6px;
     cursor: pointer;
     position: relative;
@@ -273,13 +298,15 @@ export default {
     height: 30px;
     line-height: 178px;
     text-align: center;
-    padding: 20px 0 0;
+    /* padding: 0 0 0; */
+    /* margin-top: -40px; */
+    /* border: 1px solid blue; */
 }
 
 .avatar {
     width: 178px;
-    height: 100px;
-    display: block;
+    /* height: 100px; */
+    /* display: block; */
 }
 
 .upload-img-tips {

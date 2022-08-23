@@ -16,6 +16,7 @@ import {get} from "@/utils/storage"
 
 import { Message } from 'element-ui';
 import Editor from "@/views/editor/index"
+import Published from "@/views/editor/Published"
 const router = new Router({
   routes: [
     {
@@ -45,6 +46,14 @@ const router = new Router({
           },
         },
       ]
+    },
+    {
+      name: 'Published',
+      path: "/published",
+      component: Published,
+      meta: {
+        title: "发布成功"
+      },
     },
     {
       name: "Shopping",

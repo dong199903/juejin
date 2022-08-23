@@ -84,10 +84,6 @@ export default {
     width: 100%;
     height: 100%;
     background: #f4f5f5;
-    /* 解决有滚动条时页面抖动的问题 */
-    width: 100vw;
-    overflow: hidden;
-    padding-right: calc(100vw - 100%);
   }
   .me-bot{
     background: #fff;

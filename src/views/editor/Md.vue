@@ -169,7 +169,8 @@ export default {
     if (pid) {
       // 获取草稿箱的内容
       this.$store.commit('REFRESH_ARTICLE_DATA')
-      const draftMsg = this.$store.commit("GET_DRAFT_ITEM",pid)
+      this.$store.commit("GET_DRAFT_ITEM",pid);
+      let draftMsg = this.$store.state.editorModule.activeDraft;
       //const draftMsg = this.$store.state.editorModule.draft["draft" + pid]
       // console.log(draftMsg);
       if (draftMsg && draftMsg.username == "admin") {
