@@ -9,7 +9,6 @@
     </div>
 
     <div class="list-item-bot">
-
       <div class="list-item-content">
         <div class="title">{{source.title}}</div>
         <div class="content">{{source.content}}</div>

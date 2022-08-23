@@ -157,7 +157,7 @@ export default {
                 if (valid) {
                     // 验证通过
                     const data = {
-                        username: 123456,
+                        username: "掘金酱",
                         date: Date.now(),
                         tag: this.formMsg.tag,
                         title: this.articleTitle,

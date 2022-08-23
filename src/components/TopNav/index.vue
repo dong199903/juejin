@@ -56,7 +56,7 @@
                             创作者中心
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item icon="el-icon-edit">写文章</el-dropdown-item>
+                                    <el-dropdown-item icon="el-icon-edit"><router-link to="/editor" tag="span">写文章</router-link></el-dropdown-item>
                                     <el-dropdown-item icon="el-icon-edit-outline"> 发沸点 </el-dropdown-item>
                                     <el-dropdown-item icon="el-icon-s-platform"> 写代码 </el-dropdown-item>
                                 </el-dropdown-menu>
