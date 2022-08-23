@@ -1,5 +1,6 @@
 <template>
   <div class="detail">
+    <TopNav></TopNav>
     <div class="detail-main">
       <div class="detail-main-left">
         <!--渲染的文本-->
@@ -34,6 +35,7 @@
   </div>
 </template>
 <script>
+import TopNav from '@/components/TopNav'
 import IconBarVue from '@/components/IconBar.vue'
 import Comment from "@/components/Comment.vue"
 import Group from "@/components/Group.vue"
@@ -41,7 +43,7 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css'
 export default {
   components:{
-    IconBarVue,Comment,Group
+    IconBarVue,Comment,Group,TopNav
   },
   data(){
     return {
@@ -99,7 +101,7 @@ export default {
   }
   .detail-main{
     height: 100%;
-    margin-left: 200px;
+    margin-left: 50px;
     display: flex;
   }
   .detail-main-right{
@@ -107,6 +109,7 @@ export default {
     margin-left: 20px;
   }
   .detail-main-left{
+    margin-top: 20px;
     width: 900px;
     background: #fff;
     padding: 30px; 

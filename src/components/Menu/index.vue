@@ -5,7 +5,7 @@
                 <ul>
                     <li><a href="#">综合</a></li>
                     <li><a href="#">关注</a></li>
-                    <li class="backend"><a href="#">后端</a></li>
+                    <li><a href="#">后端</a></li>
                     <li><a href="#">前端</a></li>
                     <li><a href="#">Android</a></li>
                     <li><a href="#">iOS</a></li>
@@ -48,7 +48,6 @@
     border-bottom: #F4F5F5 1.5px solid;
 
 }
-
 .submenu {
     display: flex;
     justify-content: space-between !important;
@@ -62,7 +61,7 @@ ul {
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-
+    padding: 15px;
 }
 
 li {
@@ -81,7 +80,6 @@ a:hover,
 a:active {
     color: #1787FB;
 }
-
 
 ul .backend a:hover~.hover-menu {
     opacity: 1;

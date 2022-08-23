@@ -152,9 +152,9 @@ export default {
             }
             //点击历史搜索，跳转搜索结果页
             this.$router.push({
-                path: "/",
-                query: {
-                    search_val: item.title,
+               name: "Search",
+                params: {
+                  query: this.keyword,
                 },
             }).catch(err => {});
         },

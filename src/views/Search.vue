@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <TopNav></TopNav>
-    <img src="./../assets/title.jpg"/>
+    <SearchMenu></SearchMenu>
     <div class="ser-content">
       <div v-for="(item,index) in list"  :key="index" @click="goDetal(item.postId)" >
         <Item :source="item"/>
@@ -13,10 +13,13 @@
 <script>
 import TopNav from '@/components/TopNav/index.vue';
 import Item from "@/views/homeArticleList/Item.vue";
+import SearchMenu from '../components/SearchMenu/index.vue'
 export default{
   components:{
-    TopNav,Item
-  },
+    TopNav,
+    Item,
+    SearchMenu
+},
   //将路由传递的参数获取数据
   created(){
     let query = this.$route.params.query
@@ -48,6 +51,8 @@ export default{
   }
   .ser-content{
     width:700px;
-    margin:0 auto;
+    margin-left: 160px;
+    margin-top: 20px;
+    /* margin:0 auto; */
   }
 </style>
