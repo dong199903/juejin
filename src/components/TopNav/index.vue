@@ -52,10 +52,10 @@
                     </div>
                     <!-- 创作者中心 -->
                     <div class="creation">
-                        <el-dropdown split-button type="primary" trigger="click" size="medium">
+                        <el-dropdown split-button type="primary" trigger="click" size="medium" >
                             创作者中心
                             <template #dropdown>
-                                <el-dropdown-menu>
+                                <el-dropdown-menu class="header-new-drop">
                                     <el-dropdown-item icon="el-icon-edit">
                                         <router-link to="/editor" tag="span">写文章</router-link>
                                     </el-dropdown-item>
@@ -197,6 +197,9 @@ export default {
 </script>
 
 <style scoped>
+.header-new-drop li {
+	width: 105px;
+}
 /* 整体顶部导航栏 */
 .nav {
     top: 0;

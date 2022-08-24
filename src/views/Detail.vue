@@ -110,6 +110,7 @@ export default {
   }
   .detail-main-left{
     margin-top: 20px;
+    margin-left: 20px;
     width: 900px;
     background: #fff;
     padding: 30px; 
