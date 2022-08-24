@@ -21,12 +21,12 @@
                             </el-menu-item>
                         </template>
                         <el-menu-item>
-                            <a  href="https://juejin.cn/app?utm_source=jj_nav">
+                            <a href="https://juejin.cn/app?utm_source=jj_nav">
                                 APP
                             </a>
                         </el-menu-item>
                         <el-menu-item>
-                            <a  href="https://juejin.cn/extension?utm_source=jj_nav">
+                            <a href="https://juejin.cn/extension?utm_source=jj_nav">
                                 插件
                             </a>
                         </el-menu-item>
@@ -56,7 +56,9 @@
                             创作者中心
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item icon="el-icon-edit">写文章</el-dropdown-item>
+                                    <el-dropdown-item icon="el-icon-edit">
+                                        <router-link to="/editor" tag="span">写文章</router-link>
+                                    </el-dropdown-item>
                                     <el-dropdown-item icon="el-icon-edit-outline"> 发沸点 </el-dropdown-item>
                                     <el-dropdown-item icon="el-icon-s-platform"> 写代码 </el-dropdown-item>
                                 </el-dropdown-menu>
@@ -120,7 +122,7 @@ export default {
             keyword: '',                   //接收搜索框输入的数据
             menuList,                      //菜单列表
             activeIndex: this.$route.path, //当菜单为路由模式时,激活菜单的路径
-            filHistory: [],                 //搜索查询结果
+            filHistory: [],                //搜索查询结果
             //定义一个存放历史搜索记录的数组
             searchHistory: JSON.parse(localStorage.getItem('SearchHistory')) || [],
         };
@@ -135,8 +137,6 @@ export default {
             }
             // 调用 callback 返回建议列表的数据
             cb(results);
-
-
         },
         createFilter(queryString) {
             return (searchHistory) => {
@@ -152,11 +152,11 @@ export default {
             }
             //点击历史搜索，跳转搜索结果页
             this.$router.push({
-               name: "Search",
+                name: "Search",
                 params: {
-                  query: this.keyword,
+                    query: this.keyword,
                 },
-            }).catch(err => {});
+            }).catch(err => { });
         },
         //回车，点击事件，此处应查询与输入匹配的title
         setIntoStorage(event) {
@@ -164,17 +164,24 @@ export default {
                 event.target.blur();
             }
             if (!this.keyword.trim()) return alert('请输入搜索内容');
-            //将用户的输入包装成一个histroyObj对象
-            const histroyObj = { id: nanoid(), title: this.keyword }
-            this.searchHistory.unshift(histroyObj)
+            //判断搜索历史是否存在
+            let exist = this.searchHistory.filter(item => {
+                return item.title === this.keyword;
+            }).length === 0 ? false : true;
+            if (!exist) {
+                //将用户的输入包装成一个histroyObj对象
+                const histroyObj = { id: nanoid(), title: this.keyword }
+                this.searchHistory.unshift(histroyObj)
+                console.log(this.searchHistory);
+                localStorage.setItem('SearchHistory', JSON.stringify(this.searchHistory))
+            }
             //跳转到搜索结果页
             this.$router.push({
                 name: "Search",
                 params: {
-                  query: this.keyword,
+                    query: this.keyword,
                 },
             }).catch(err => console.log(err));
-            // console.log(this);
         },
         //清空历史搜索记录
         empty() {
@@ -183,23 +190,8 @@ export default {
         }
     },
     watch: {
-        keyWord: {
-            immediate: true,
-            handler(val) {
-                // this.filHistory = this.searchHistory.reverse()
-                // console.log(this.filHistory);
-            },
-            deep: true,
-        },
-        searchHistory: {
-            deep: true,
-            handler(value) {
-                localStorage.setItem('SearchHistory', JSON.stringify(value))
-            }
-        }
     },
     mounted() {
-
     }
 }
 </script>
